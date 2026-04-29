@@ -965,7 +965,7 @@ select:focus {
             if (choice && !isNaN(choice) && choice >= 1 && choice <= userProducts.length) {
                 const myProduct = userProducts[choice - 1];
                 const { data: targetSeller } = await supabaseClient.from('users').select('phone').eq('id', targetSellerId).single();
-                const phone = targetSeller?.phone || '+923000000000';
+                const phone = targetSeller?.phone || '+923361871497';
                 const message = `Hello ${targetSellerName}! My name is ${currentUser.name} from Swapify. I have "${myProduct.product_name}" (${myProduct.price_coins} coins) and I want to swap it with your "${targetProductName}". Are you interested in this swap?`;
                 window.open(`https://wa.me/${phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
             }
