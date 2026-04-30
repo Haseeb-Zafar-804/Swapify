@@ -6,8 +6,6 @@
     <title>Swapify — Premium Peer Swap Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -15,31 +13,81 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f4f7fb 0%, #e9eef4 100%);
-            color: #1a2c3e;
+            background: #ffffff;
+            color: #1a1a1a;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
-            position: relative;
+        /* ========== GLOBAL LOADER ========== */
+        .global-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .global-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 4px solid #e2e2e2;
+            border-top: 4px solid #2d2d2d;
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Navbar */
+        /* Skeleton Loading */
+        .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 5px;
+            padding: 0.5rem;
+        }
+        .skeleton-card {
+            background: #fafafa;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #ececec;
+            animation: pulse 1.4s infinite;
+        }
+        .skeleton-img { height: 160px; background: #eaeef2; }
+        .skeleton-text { height: 14px; background: #eef2f5; margin: 12px; border-radius: 4px; }
+        .skeleton-text.short { width: 60%; }
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* ========== NAVBAR ========== */
         .navbar {
-            background: rgba(255, 255, 255, 0.97);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f5;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
         }
-
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -48,311 +96,314 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.8rem;
         }
-
-        .logo {
-            font-size: 1.4rem;
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 2;
+            min-width: 200px;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .logo-img { height: 38px; width: auto; }
+        .logo-text {
             font-weight: 800;
-            background: linear-gradient(135deg, #0b3b4f, #2d8f6e);
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #2c2c2c, #1e1e1e);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 0.3rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-link {
-            cursor: pointer;
-            padding: 0.4rem 0.9rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            background: transparent;
-            border: none;
-            color: #2c4a6e;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .nav-link:hover {
-            background: #e8f0f7;
-            transform: translateY(-1px);
-        }
-
-        .coin-badge {
-            background: linear-gradient(135deg, #fff8e7, #ffefc4);
-            padding: 0.35rem 1rem;
-            border-radius: 50px;
-            font-weight: 700;
-            color: #c2781a;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid #ffe2a4;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0.05rem;
-        }
-
-        /* Search */
-        .search-wrapper {
-            background: white;
+        .header-search {
+            background: #ffffff;
             border-radius: 60px;
-            border: 1px solid #e2eaf1;
-            padding: 0.2rem;
+            border: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
-            margin-bottom: 1.5rem;
+            gap: 0.25rem;
+            padding: 0.2rem 0.2rem 0.2rem 1rem;
             width: 100%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            flex: 1;
         }
-        .search-wrapper input {
+        .header-search input {
             flex: 1;
             border: none;
             outline: none;
-            font-size: 0.85rem;
             background: transparent;
-            padding: 0.7rem 1rem;
-            min-width: 0;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.2rem;
         }
-        .search-wrapper button {
-            background: #1e6f5c;
+        .header-search input::placeholder { color: #9aa9b9; }
+        .header-search button {
+            background: #2c2c2c;
             border: none;
             color: white;
-            padding: 0.5rem 1.2rem;
+            padding: 0.4rem 1rem;
             border-radius: 50px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            transition: all 0.2s;
+            font-size: 0.7rem;
+            transition: 0.2s;
         }
-        .search-wrapper button:hover {
-            background: #0e5546;
-            transform: scale(0.98);
-        }
-
-        /* Tabs Section - Swipeable for Mobile */
-        .info-tabs-section {
-            background: white;
-            border-radius: 28px;
-            margin-bottom: 1.8rem;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
-            border: 1px solid #eef2f8;
-        }
-        .tabs-header {
-            display: flex;
-            gap: 0;
-            background: #f8fafd;
-            border-bottom: 1px solid #e2edf2;
-            overflow-x: auto;
-            scrollbar-width: thin;
-            -webkit-overflow-scrolling: touch;
-        }
-        .tabs-header::-webkit-scrollbar {
-            height: 2px;
-        }
-        .tab-btn {
-            flex: 0 0 auto;
-            padding: 0.8rem 1rem;
-            font-weight: 700;
-            font-size: 0.8rem;
-            background: transparent;
-            border: none;
-            color: #5f7f9e;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            position: relative;
-        }
-        .tab-btn.active {
-            color: #1e6f5c;
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1e6f5c;
-            border-radius: 2px;
-        }
-        .tab-content {
-            padding: 1.2rem;
-            background: white;
-            overflow-x: hidden;
-        }
-        .tab-pane {
-            display: none;
-            animation: fadeIn 0.2s ease;
-        }
-        .tab-pane.active-pane {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(8px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .info-card {
-            background: #f9fcfd;
-            border-radius: 24px;
-            padding: 1rem;
-        }
-        .info-row {
+        .header-search button:hover { background: #1f1f1f; transform: scale(0.96); }
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin: 0.8rem 0;
+            gap: 0.6rem;
             flex-wrap: wrap;
-            border-bottom: 1px solid #eef2f8;
-            padding-bottom: 0.7rem;
         }
-        .info-label {
-            font-weight: 700;
-            width: 110px;
-            color: #2b4f6c;
+        .coin-badge-header {
+            padding: 0.4rem 1rem;
+            border-radius: 60px;
+            background: #f7f9fc;
+            color: #2d2d2d;
+            font-weight: 800;
             font-size: 0.8rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .info-value {
-            color: #2c6e5b;
-            font-weight: 500;
-            font-size: 0.85rem;
-            word-break: break-word;
-            flex: 1;
-        }
-        .loc-badge {
-            background: #eef6f3;
-            border-radius: 40px;
-            padding: 0.25rem 1rem;
+        .coin-badge-header:hover { background: #eef2ff; transform: translateY(-1px); }
+        .nav-icon-btn {
+            background: #f7f9fc;
+            border: 1px solid #e2e8f0;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
             font-size: 0.75rem;
-            display: inline-flex;
+            color: #1f1f1f;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
             align-items: center;
             gap: 6px;
         }
-        .footer {
-            background: #0d2c2a;
-            color: #bfdad2;
-            text-align: center;
-            padding: 1.5rem 1rem;
-            margin-top: 2rem;
-            font-size: 0.7rem;
-            border-top-left-radius: 28px;
-            border-top-right-radius: 28px;
+        .nav-icon-btn:hover { background: #2c2c2c; color: white; transform: translateY(-2px); }
+
+        /* Icon Bar */
+        .icon-bar {
+            background: #ffffff;
+            border-radius: 70px;
+            margin: 0.6rem 0.8rem 1rem 0.8rem;
+            padding: 0.3rem 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.2rem;
         }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            font-size: 0.65rem;
+            color: #2d2d2d;
+            padding: 0.4rem 0.8rem;
+        }
+        .icon-item i { font-size: 1.2rem; color: #2c2c2c; transition: 0.2s; }
+        .icon-item:hover { background: #f1f5f9; transform: translateY(-3px); }
+        #sellIconBtn { background: #f1f5f9; border: 1px solid #e2e8f0; }
 
         /* Products Grid */
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 0.5rem; }
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.2rem;
+            gap: 5px;
+            margin-top: 0.5rem;
         }
         .product-card {
-            background: white;
-            border-radius: 28px;
+            background: #ffffff;
+            border-radius: 4px;
             overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+            border: 1px solid #eceff4;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-        }
-        .product-image {
-            width: 100%;
-            height: 190px;
-            object-fit: cover;
-            background: #f0f4f9;
-        }
-        .product-info {
-            padding: 1rem;
-        }
-        .title-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-bottom: 0.4rem;
-        }
-        .product-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: #0a2b3b;
-        }
-    
-        .coin-tag {
-            background: #eef6f3;
-            padding: 0.2rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #1d7a63;
-        }
-        .product-desc {
-            font-size: 0.75rem;
-            color: #54708f;
-            margin: 0.5rem 0;
-            line-height: 1.4;
-        }
-        .seller-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.7rem;
-            color: #6b8aac;
-            margin: 0.5rem 0;
-            border-top: 1px solid #eef2f7;
-            padding-top: 0.5rem;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-            flex-wrap: wrap;
-        }
-        .btn-buy, .btn-whatsapp, .btn-swap, .btn-edit, .btn-delete {
-            padding: 0.5rem 0;
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.1); }
+        .product-image { width: 100%; height: 180px; object-fit: cover; background: #f8fafc; }
+        .product-info { padding: 0.8rem; }
+        .title-bar { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.4rem; }
+        .product-title { font-size: 0.9rem; font-weight: 800; color: #1e1e1e; }
+        .coin-tag { background: #f1f5f9; padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.65rem; font-weight: 700; color: #2d2d2d; }
+        .product-desc { font-size: 0.7rem; color: #5a6e85; margin: 0.4rem 0; line-height: 1.4; }
+        .seller-row { display: flex; gap: 6px; align-items: center; font-size: 0.65rem; color: #5f7f9e; margin: 0.5rem 0; border-top: 1px solid #eef2f8; padding-top: 0.5rem; }
+        .action-buttons { display: flex; gap: 5px; margin-top: 0.6rem; flex-wrap: wrap; }
+        .btn-buy, .btn-swap, .btn-edit, .btn-delete {
+            padding: 0.45rem 0;
             border: none;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
             flex: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
-            transition: all 0.2s;
+            gap: 4px;
+            transition: all 0.2s ease;
+            background: #2d2d2d;
+            color: white;
         }
-        .btn-buy { background: linear-gradient(135deg, #1e6f5c, #1a5f4e); color: white; }
-        .btn-whatsapp { background: linear-gradient(135deg, #25D366, #20b859); color: white; }
-        .btn-swap { background: linear-gradient(135deg, #f59e0b, #e67e22); color: white; }
-        .btn-edit { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-        .btn-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+        .btn-buy:hover, .btn-swap:hover, .btn-edit:hover, .btn-delete:hover { background: #1a1a1a; transform: translateY(-2px); }
+
+        /* ========== PRODUCT DETAIL PAGE - PROFESSIONAL LAYOUT ========== */
+        .product-detail-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .detail-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eef2f8;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
+        }
+        .back-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: #e2e8f0; transform: scale(1.05); }
         
-        .btn-buy:hover, .btn-whatsapp:hover, .btn-swap:hover, .btn-edit:hover, .btn-delete:hover {
-            transform: translateY(-2px);
-            filter: brightness(0.95);
+        /* Desktop: image left, details right */
+        .detail-grid {
+            max-width: 1200px;
+            padding: 0.4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+        .detail-image-section {
+            position: sticky;
+            top: 100px;
+        }
+        .detail-main-img {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f8fafc;
+        }
+        .detail-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .detail-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #1a1a1a;
+        }
+        .detail-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d2d2d;
+            background: #f1f5f9;
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 60px;
+            width: fit-content;
+        }
+        .detail-desc {
+            color: #5a6e85;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        .detail-seller-card {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 24px;
+            margin: 0.5rem 0;
+        }
+        .detail-seller-card p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .detail-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .detail-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .detail-btn-buy { background: #2d2d2d; color: white; }
+        .detail-btn-swap { background: #25D366; color: #1a1a1a; }
+        .detail-btn-buy:hover, .detail-btn-swap:hover { transform: translateY(-3px); filter: brightness(0.96); }
+        
+        /* Mobile: image top, details below */
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0.2rem;
+                margin: 1rem auto;
+            }
+            .detail-image-section {
+                position: relative;
+                top: 0;
+            }
+            .detail-title { font-size: 1.6rem; }
+            .detail-price { font-size: 1.3rem; }
+            .detail-desc { font-size: 0.9rem; }
+            .detail-btn { padding: 0.8rem; font-size: 0.9rem; }
         }
 
-        /* Modal Styles - Fixed */
+        /* Modal & other styles */
         .modal {
             display: none;
             position: fixed;
@@ -360,261 +411,188 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 37, 48, 0.8);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 1100;
         }
         .modal-content {
             background: white;
-            border-radius: 32px;
+            border-radius: 36px;
             max-width: 500px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
             padding: 1.8rem;
             position: relative;
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
         }
-        .modal-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1.2rem;
-            color: #1a2c3e;
-            text-align: center;
-        }
+        .modal-content h3 { font-size: 1.3rem; margin-bottom: 1.2rem; text-align: center; }
         .modal-content input, .modal-content textarea {
             width: 100%;
             padding: 0.8rem 1rem;
-            margin: 0.6rem 0;
-            border: 1.5px solid #e1eaf1;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-        .modal-content input:focus, .modal-content textarea:focus {
-            outline: none;
-            border-color: #2d8f6e;
-            box-shadow: 0 0 0 3px rgba(45, 143, 110, 0.08);
+            margin: 0.5rem 0;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 40px;
         }
         .upload-zone {
-            background: #f9fcfd;
-            border: 1.5px dashed #bdd4e2;
-            border-radius: 30px;
+            background: #fafcff;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 32px;
             padding: 0.8rem;
             text-align: center;
             cursor: pointer;
-            margin: 0.6rem 0;
-            transition: 0.2s;
         }
-        .upload-zone:hover {
-            background: #f0f7fa;
-            border-color: #2d8f6e;
-        }
-        .preview-img {
-            margin: 0.5rem 0;
-        }
-        .preview-img img {
-            max-width: 100%;
-            max-height: 120px;
-            border-radius: 16px;
-        }
+        .preview-img img { max-width: 100%; max-height: 100px; border-radius: 16px; margin-top: 6px; }
         .modal-btn {
             width: 100%;
-            padding: 0.8rem;
-            margin-top: 0.8rem;
+            padding: 0.75rem;
+            margin-top: 0.6rem;
             border: none;
-            border-radius: 40px;
+            border-radius: 50px;
             font-weight: 700;
-            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        .modal-btn-primary {
-            background: linear-gradient(135deg, #1e6f5c, #1a5f4e);
+            background: #2d2d2d;
             color: white;
         }
-        .modal-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(30,111,92,0.3);
-        }
-        .modal-btn-secondary {
-            background: #eef2f7;
-            color: #2c4a6e;
-            margin-top: 0.5rem;
-        }
-        .modal-btn-secondary:hover {
-            background: #e2e8f0;
-        }
+        .modal-btn:hover { background: #1a1a1a; transform: translateY(-2px); }
         .close-modal {
             position: absolute;
             top: 1rem;
             right: 1.2rem;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #8ba5bc;
-            transition: 0.2s;
+            color: #8ba0bc;
         }
-        .close-modal:hover {
-            color: #dc2626;
-        }
-
-        /* Profile Modal */
-        .profile-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 37, 48, 0.8);
-            backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-        .profile-modal-content {
-            background: white;
-            border-radius: 40px;
-            max-width: 450px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 1.8rem;
-            position: relative;
-        }
-        .profile-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #1e6f5c, #34a375);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 2.5rem;
-            color: white;
-        }
-
         .toast {
             position: fixed;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            background: #1e2f3e;
+            background: #1e2a3a;
             color: white;
             padding: 0.7rem 1.3rem;
             border-radius: 60px;
-            z-index: 1100;
+            z-index: 1200;
             display: flex;
             gap: 8px;
             align-items: center;
             font-size: 0.75rem;
             animation: slideUp 0.3s ease;
-            white-space: nowrap;
         }
         @keyframes slideUp {
             from { transform: translateX(-50%) translateY(20px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
-
-        @media (max-width: 640px) {
-            .nav-container { padding: 0.6rem 0.8rem; }
-            .container { padding: 0.8rem; }
-            .info-label { width: 95px; font-size: 0.75rem; }
-            .tab-btn { padding: 0.6rem 0.9rem; font-size: 0.7rem; }
-            .action-buttons { flex-direction: row; }
-            .toast { white-space: normal; text-align: center; max-width: 85%; }
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.8rem;
+            color: #2d2d2d;
         }
-        /* Login/Signup Input Fields - Clean & Modern */
-.login-container input,
-.signup-container input,
-#loginPanel input,
-#signupPanel input {
-    width: 100%;
-    padding: 0.9rem 1.2rem;
-    margin: 0.7rem 0;
-    border: 1.5px solid #e1eaf1;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: #ffffff;
-    transition: all 0.25s ease;
-    outline: none;
-    color: #1a2c3e;
-}
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            background: #f8fafc;
+            padding: 6px 10px;
+            border-radius: 24px;
+            font-size: 0.8rem;
+        }
+        .footer {
+            background: #f8fafc;
+            text-align: center;
+            padding: 1.2rem;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #4a5b6e;
+        }
+        @media (max-width: 400px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; }
+            .product-image { height: 130px; }
+            .product-title { font-size: 0.75rem; }
+        }
+     
+        /* Fix header search on small devices (under 500px) */
+        @media (max-width: 550px) {
+            .nav-container {
+                padding: 0.6rem 0.8rem;
+                gap: 0.6rem;
+            }
+            .logo-area {
+                width: 100%;
+                gap: 0.6rem;
+                flex-wrap: wrap;
+            }
+            .brand-logo {
+                flex-shrink: 0;
+            }
+            .logo-text {
+                font-size: 1rem;
+            }
+            .logo-img {
+                height: 32px;
+            }
+            .header-search {
+                width: 100%;
+                flex: auto;
+                padding: 0.15rem 0.15rem 0.15rem 0.8rem;
+            }
+            .header-search input {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.1rem;
+            }
+            .header-search button {
+                padding: 0.35rem 0.8rem;
+                font-size: 0.65rem;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+                gap: 0.5rem;
+            }
+            .coin-badge-header {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            .nav-icon-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            .icon-bar {
+                margin: 0.5rem 0.6rem 0.8rem 0.6rem;
+                padding: 0.25rem 0.5rem;
+            }
+            .icon-item {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.55rem;
+            }
+            .icon-item i {
+                font-size: 1rem;
+            }
+        }
 
-/* Input Focus State */
-.login-container input:focus,
-.signup-container input:focus,
-#loginPanel input:focus,
-#signupPanel input:focus {
-    border-color: #2d8f6e;
-    box-shadow: 0 0 0 4px rgba(45, 143, 110, 0.1);
-    transform: translateY(-1px);
-}
-
-/* Input Hover State */
-.login-container input:hover,
-.signup-container input:hover,
-#loginPanel input:hover,
-#signupPanel input:hover {
-    border-color: #bdd4e2;
-}
-
-/* Placeholder Styling */
-.login-container input::placeholder,
-.signup-container input::placeholder,
-#loginPanel input::placeholder,
-#signupPanel input::placeholder {
-    color: #a0b8cc;
-    font-weight: 400;
-    font-size: 0.85rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 640px) {
-    .login-container input,
-    .signup-container input,
-    #loginPanel input,
-    #signupPanel input {
-        padding: 0.75rem 1rem;
-        font-size: 0.85rem;
-        margin: 0.6rem 0;
-    }
-}
-
-/* Error State (optional) */
-.login-container input.error,
-.signup-container input.error,
-#loginPanel input.error,
-#signupPanel input.error {
-    border-color: #dc2626;
-    background: #fef2f2;
-}
-
-.login-container input.error:focus,
-.signup-container input.error:focus {
-    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
-}
-
-/* Success State (optional) */
-.login-container input.success,
-.signup-container input.success,
-#loginPanel input.success,
-#signupPanel input.success {
-    border-color: #10b981;
-}
-
-/* For password fields specifically */
-input[type="password"] {
-    letter-spacing: 0.1rem;
-}
+        /* Under 380px - more compact */
+        @media (max-width: 380px) {
+            .coin-badge-header {
+                padding: 0.25rem 0.6rem;
+                font-size: 0.65rem;
+            }
+            .nav-icon-btn {
+                padding: 0.25rem 0.6rem;
+                font-size: 0.65rem;
+            }
+            .header-search button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.6rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -631,28 +609,33 @@ input[type="password"] {
         let userLocation = null;
         let locationCaptured = false;
 
-        function escapeHtml(str) { 
-            if (!str) return ''; 
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+        function showLoader() {
+            let loader = document.getElementById('globalLoader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'globalLoader';
+                loader.className = 'global-loader';
+                loader.innerHTML = `<div class="spinner"></div><div class="loader-text">Loading Swapify</div>`;
+                document.body.appendChild(loader);
+            }
+            loader.classList.remove('hidden');
         }
-        
-        function showToast(message, isError = false) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(message)}`;
-            toast.style.background = isError ? '#dc2626' : '#1e6f5c';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2800);
+        function hideLoader() { document.getElementById('globalLoader')?.classList.add('hidden'); }
+        function showSkeleton() {
+            const root = document.getElementById('root');
+            if (!root || document.querySelector('.skeleton-grid')) return;
+            root.insertAdjacentHTML('beforeend', `<div class="skeleton-grid" id="skeletonGrid">${Array(6).fill(0).map(() => `<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text"></div></div>`).join('')}</div>`);
         }
-        
+        function removeSkeleton() { document.getElementById('skeletonGrid')?.remove(); }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+        function showToast(msg, isErr=false) { 
+            let div = document.createElement('div'); div.className = 'toast'; 
+            div.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(msg)}`; 
+            div.style.background = isErr ? '#b91c1c' : '#1f2a3e'; 
+            document.body.appendChild(div); setTimeout(()=>div.remove(), 2800);
+        }
         function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 8); }
         function isValidPakistanPhone(phone) { return /^\+92[0-9]{10}$/.test(phone); }
-        
         async function imageToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -661,8 +644,7 @@ input[type="password"] {
                 reader.onerror = reject;
             });
         }
-
-        // GEOLOCATION - capture once, store area/city name only
+        
         async function captureUserLocationOnce() {
             if (locationCaptured && userLocation) return userLocation;
             return new Promise((resolve) => {
@@ -674,25 +656,17 @@ input[type="password"] {
                 }
                 navigator.geolocation.getCurrentPosition(
                     async (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        let cityName = "Pakistan";
-                        let areaDetail = "Major City";
+                        let cityName = "Pakistan", areaDetail = "Major City";
                         try {
-                            const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&addressdetails=1`);
+                            const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&zoom=12`);
                             const geoData = await geoRes.json();
                             const addr = geoData.address || {};
                             cityName = addr.city || addr.town || addr.village || addr.state || "Pakistan";
                             areaDetail = addr.suburb || addr.neighbourhood || addr.county || cityName;
-                        } catch(e) { 
-                            cityName = "Pakistan"; 
-                            areaDetail = "Urban Area";
-                        }
+                        } catch(e) {}
                         userLocation = { city: cityName, area: areaDetail };
                         locationCaptured = true;
-                        if (currentUser) {
-                            localStorage.setItem(`swapify_loc_${currentUser.id}`, JSON.stringify(userLocation));
-                        }
+                        if (currentUser) localStorage.setItem(`swapify_loc_${currentUser.id}`, JSON.stringify(userLocation));
                         resolve(userLocation);
                     },
                     () => {
@@ -703,8 +677,7 @@ input[type="password"] {
                 );
             });
         }
-
-        // DB Operations
+        
         async function loadProducts(search = '') {
             let query = supabase.from('products').select('*').eq('status', 'available');
             if (search) query = query.ilike('product_name', `%${search}%`);
@@ -713,8 +686,9 @@ input[type="password"] {
             cachedProducts = data || [];
             return cachedProducts;
         }
-
+        
         async function addProduct(product) {
+            showLoader();
             const newProduct = {
                 id: generateId(),
                 product_name: product.productName.trim(),
@@ -729,35 +703,43 @@ input[type="password"] {
                 status: 'available'
             };
             const { error } = await supabase.from('products').insert([newProduct]);
+            hideLoader();
             if (error) { showToast("Failed: " + error.message, true); return false; }
-            showToast("✨ Item listed successfully!", false);
+            showToast("✨ Item listed!", false);
             return true;
         }
-
+        
         async function updateProduct(productId, updates) {
+            showLoader();
             const { error } = await supabase.from('products').update(updates).eq('id', productId).eq('seller_id', currentUser.id);
+            hideLoader();
             if (error) { showToast("Update failed", true); return false; }
-            showToast("✅ Product updated", false);
+            showToast("✅ Updated", false);
             return true;
         }
-
+        
         async function deleteProduct(productId) {
+            showLoader();
             const { error } = await supabase.from('products').delete().eq('id', productId).eq('seller_id', currentUser.id);
+            hideLoader();
             if (error) return false;
-            showToast("🗑️ Product removed", false);
+            showToast("🗑️ Removed", false);
             return true;
         }
-
+        
         async function loginUser(email, password) {
+            showLoader();
             const { data, error } = await supabase.from('users').select('*').eq('email', email).eq('password', password);
+            hideLoader();
             if (error || !data || data.length === 0) return { success: false, message: "Invalid email/password" };
             return { success: true, user: data[0] };
         }
-
+        
         async function registerUser(name, email, phone, password) {
             if (!isValidPakistanPhone(phone)) return { success: false, message: "WhatsApp must be +92xxxxxxxxxx" };
+            showLoader();
             const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length) return { success: false, message: "Email already used" };
+            if (existing && existing.length) { hideLoader(); return { success: false, message: "Email already used" }; }
             const newUser = {
                 id: generateId(),
                 name: name.trim(),
@@ -769,413 +751,235 @@ input[type="password"] {
                 used_codes: {}
             };
             const { error } = await supabase.from('users').insert([newUser]);
+            hideLoader();
             if (error) return { success: false, message: error.message };
             return { success: true, user: newUser };
         }
-
+        
         async function redeemCode(code) {
             const validCodes = { 'H646CVHDG6': 500, 'SWAPIFY100': 100, 'WELCOME50': 50, 'GOLD200': 200, 'TRADEPK': 150 };
             const upper = code.toUpperCase();
             if (!validCodes[upper]) { showToast("Invalid code", true); return false; }
+            showLoader();
             const { data: u } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
             const used = u.used_codes || {};
-            if (used[upper]) { showToast("Already redeemed", true); return false; }
+            if (used[upper]) { hideLoader(); showToast("Already redeemed", true); return false; }
             const newCoins = u.coins + validCodes[upper];
             used[upper] = new Date();
             const { error } = await supabase.from('users').update({ coins: newCoins, used_codes: used }).eq('id', currentUser.id);
+            hideLoader();
             if (error) return false;
             currentUser.coins = newCoins;
             localStorage.setItem('swapify_user', JSON.stringify(currentUser));
-            showToast(`🎉 +${validCodes[upper]} coins! New balance: ${newCoins}`, false);
+            showToast(`🎉 +${validCodes[upper]} coins! Balance: ${newCoins}`, false);
             return true;
         }
-
-        // Direct Swap
+        
+        // Request Coins - redirect to WhatsApp admin
+        function requestCoinsViaWhatsApp(amount, reason) {
+            const adminWhatsApp = "+923432021486"; // Admin number - replace with actual
+            const message = `🪙 *COIN REQUEST* - Swapify\n\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nPhone: ${currentUser.phone}\nRequested Coins: ${amount}\nReason: ${reason}\n\nPlease review and add coins.`;
+            const url = `https://wa.me/${adminWhatsApp.replace('+', '')}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+            showToast(`📱 Request sent to admin via WhatsApp`, false);
+            return true;
+        }
+        
+        async function purchaseRedirectToWhatsApp(sellerId, productName, priceCoins, sellerName) {
+            if (currentUser.coins < priceCoins) { showToast(`Insufficient coins! Need ${priceCoins} coins.`, true); return; }
+            if (currentUser.id === sellerId) { showToast("You cannot purchase your own item", true); return; }
+            showLoader();
+            const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
+            hideLoader();
+            if (!sellerInfo?.phone) { showToast("Seller contact not available", true); return; }
+            const message = `🛍️ *BUY REQUEST* (Swapify)\n\nProduct: "${productName}"\nPrice: ${priceCoins} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}\nLocation: ${userLocation?.city || 'Pakistan'}`;
+            window.open(`https://wa.me/${sellerInfo.phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
+            showToast(`📲 Inquiry sent to ${sellerName}`, false);
+        }
+        
         async function directSwapToWhatsApp(sellerId, targetProductName, sellerName) {
-            try {
-                const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
-                let phoneRaw = sellerInfo?.phone || '+923000000000';
-                phoneRaw = phoneRaw.replace('+', '');
-                const locationText = userLocation ? `📍 My location: ${userLocation.city} (${userLocation.area})` : '📍 Pakistan';
-                const message = `🔄 SWAP REQUEST (Swapify)\n\n👤 Name: ${currentUser.name}\n📧 Email: ${currentUser.email}\n📞 WhatsApp: ${currentUser.phone}\n${locationText}\n\nI want to swap my item with your product: "${targetProductName}". Let's connect for swap details!`;
-                window.open(`https://wa.me/${phoneRaw}?text=${encodeURIComponent(message)}`, '_blank');
-                showToast(`💬 Swap request sent to ${sellerName}`, false);
-            } catch(err) { showToast("Swap error", true); }
+            showLoader();
+            const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
+            hideLoader();
+            let phoneRaw = sellerInfo?.phone?.replace('+', '') || '923000000000';
+            const message = `🔄 SWAP REQUEST (Swapify)\n\n${currentUser.name} wants to swap.\nMy WhatsApp: ${currentUser.phone}\nProduct: "${targetProductName}"`;
+            window.open(`https://wa.me/${phoneRaw}?text=${encodeURIComponent(message)}`, '_blank');
+            showToast(`💬 Swap request sent to ${sellerName}`, false);
         }
-
-        async function contactSeller(sellerId, productName, sellerName) {
-            const { data: seller } = await supabase.from('users').select('phone').eq('id', sellerId).single();
-            if (seller?.phone) {
-                const msg = `Hello ${sellerName}, I'm ${currentUser.name} from Swapify. Interested in "${productName}". Is it available?`;
-                window.open(`https://wa.me/${seller.phone.replace('+', '')}?text=${encodeURIComponent(msg)}`, '_blank');
-            } else showToast("Contact unavailable", true);
-        }
-
-        async function quickBuy(productId, sellerId, price, productName) {
-            if (currentUser.coins < price) { showToast(`Need ${price} coins! You have ${currentUser.coins}`, true); return; }
-            if (currentUser.id === sellerId) { showToast("Cannot buy your own item", true); return; }
-            const { data: buyer } = await supabase.from('users').select('coins').eq('id', currentUser.id).single();
-            if (buyer.coins < price) return;
-            const { data: sellerCoin } = await supabase.from('users').select('coins').eq('id', sellerId).single();
-            await supabase.from('users').update({ coins: buyer.coins - price }).eq('id', currentUser.id);
-            await supabase.from('users').update({ coins: sellerCoin.coins + price }).eq('id', sellerId);
-            await supabase.from('products').update({ status: 'sold' }).eq('id', productId);
-            currentUser.coins = buyer.coins - price;
-            localStorage.setItem('swapify_user', JSON.stringify(currentUser));
-            showToast(`✅ Purchased ${productName} for ${price} coins!`, false);
-            renderHomePage();
-        }
-
-        // Profile Modal
-        function showProfileModal() {
-            const loc = userLocation || { city: "Pakistan", area: "Major City" };
-            const modalHtml = `
-                <div class="profile-modal" id="profileModal">
-                    <div class="profile-modal-content">
-                        <span class="close-modal" onclick="closeProfileModal()">&times;</span>
-                        <div class="profile-header">
-                            <div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div>
-                            <h3>${escapeHtml(currentUser.name)}</h3>
-                            <p style="color:#6b8aac; font-size:0.75rem; margin-top:5px;">Member since ${new Date(currentUser.created_at || Date.now()).toLocaleDateString()}</p>
+        
+        // Professional Product Detail View (Desktop: image left, details right)
+        function showProductDetail(product) {
+            const isOwner = currentUser.id === product.seller_id;
+            const imgSrc = product.image_url || 'https://placehold.co/800x600/f8fafc/8ba0bc?text=Swap+Item';
+            const detailHTML = `
+                <div class="product-detail-page" id="productDetailPage">
+                    <div class="detail-header">
+                        <button class="back-btn" id="closeDetailBtn"><i class="fas fa-arrow-left"></i></button>
+                        <h3 style="margin:0;">Product Details</h3>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-image-section">
+                            <img class="detail-main-img" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(product.product_name)}" onerror="this.src='https://placehold.co/800x600/f8fafc/8ba0bc?text=Image'">
                         </div>
-                        <div class="info-card">
-                            <div class="info-row"><span class="info-label"><i class="fas fa-id-card"></i> Full Name</span><span class="info-value">${escapeHtml(currentUser.name)}</span></div>
-                            <div class="info-row"><span class="info-label"><i class="fas fa-envelope"></i> Email Address</span><span class="info-value">${escapeHtml(currentUser.email)}</span></div>
-                            <div class="info-row"><span class="info-label"><i class="fab fa-whatsapp"></i> WhatsApp</span><span class="info-value">${escapeHtml(currentUser.phone)}</span></div>
-                            <div class="info-row"><span class="info-label"><i class="fas fa-coins"></i> Coins Balance</span><span class="info-value"><strong style="font-size:1.1rem;">${currentUser.coins} 🪙</strong></span></div>
-                            <div class="info-row"><span class="info-label"><i class="fas fa-map-pin"></i> Location Area</span><span class="info-value"><span class="loc-badge"><i class="fas fa-location-dot"></i> ${escapeHtml(loc.city)} • ${escapeHtml(loc.area)}</span></span></div>
-                            <div class="info-row"><span class="info-label"><i class="fas fa-chart-line"></i> Member Status</span><span class="info-value">Premium Swapper ⭐</span></div>
-                            <div class="info-row"><span class="info-label"><i class="fas fa-tag"></i> Account ID</span><span class="info-value">${escapeHtml(currentUser.id.substring(0, 12))}...</span></div>
+                        <div class="detail-info-section">
+                            <h1 class="detail-title">${escapeHtml(product.product_name)}</h1>
+                            <div class="detail-price">🪙 ${product.price_coins} Coins</div>
+                            <div class="detail-desc">${escapeHtml(product.description || 'No description provided.')}</div>
+                            <div class="detail-seller-card">
+                                <p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p>
+                                <p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.location)}</p>
+                                <p><i class="fas fa-tag"></i> Condition: ${escapeHtml(product.condition)}</p>
+                            </div>
+                            ${!isOwner ? `
+                                <div class="detail-buttons">
+                                    <button class="detail-btn detail-btn-buy" id="detailBuyBtn"><i class="fas fa-shopping-cart"></i> Buy Now</button>
+                                    <button class="detail-btn detail-btn-swap" id="detailSwapBtn"><i class="fab fa-whatsapp"></i> Swap on WhatsApp</button>
+                                </div>
+                            ` : `
+                                <div class="detail-buttons">
+                                    <button class="detail-btn detail-btn-buy" id="detailEditBtn" style="background:#3b82f6;"><i class="fas fa-edit"></i> Edit Item</button>
+                                    <button class="detail-btn detail-btn-swap" id="detailDeleteBtn" style="background:#dc2626;"><i class="fas fa-trash"></i> Delete Item</button>
+                                </div>
+                            `}
                         </div>
-                        <button onclick="closeProfileModal()" class="modal-btn modal-btn-primary" style="margin-top:1rem;">Close</button>
                     </div>
                 </div>
             `;
-            let existingModal = document.getElementById('profileModal');
-            if (existingModal) existingModal.remove();
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-            document.getElementById('profileModal').style.display = 'flex';
-        }
-        window.showProfileModal = showProfileModal;
-        window.closeProfileModal = () => { let m = document.getElementById('profileModal'); if(m) m.remove(); };
-
-        // Tabs with swipe
-        let currentTabIndex = 0;
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const panes = document.querySelectorAll('.tab-pane');
-            
-            function activateTab(index) {
-                tabs.forEach((t, i) => {
-                    t.classList.toggle('active', i === index);
-                });
-                panes.forEach((p, i) => {
-                    p.classList.toggle('active-pane', i === index);
-                });
-                currentTabIndex = index;
-                if (index === 1) document.getElementById('tab1').innerHTML = renderUserDetailsHTML();
-                if (index === 2) document.getElementById('tab2').innerHTML = renderLocationHTML();
-                if (index === 0) document.getElementById('tab0').innerHTML = renderAmountHTML();
-            }
-            
-            tabs.forEach((tab, idx) => {
-                tab.onclick = () => activateTab(idx);
-            });
-            
-            const section = document.querySelector('.info-tabs-section');
-            if (section) {
-                section.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
-                section.addEventListener('touchend', (e) => {
-                    touchEndX = e.changedTouches[0].screenX;
-                    if (Math.abs(touchEndX - touchStartX) > 50) {
-                        if (touchEndX < touchStartX && currentTabIndex < tabs.length - 1) activateTab(currentTabIndex + 1);
-                        else if (touchEndX > touchStartX && currentTabIndex > 0) activateTab(currentTabIndex - 1);
+            document.body.insertAdjacentHTML('beforeend', detailHTML);
+            document.getElementById('closeDetailBtn').onclick = () => document.getElementById('productDetailPage').remove();
+            if (!isOwner) {
+                document.getElementById('detailBuyBtn').onclick = () => {
+                    document.getElementById('productDetailPage').remove();
+                    purchaseRedirectToWhatsApp(product.seller_id, product.product_name, product.price_coins, product.seller_name);
+                };
+                document.getElementById('detailSwapBtn').onclick = () => {
+                    document.getElementById('productDetailPage').remove();
+                    directSwapToWhatsApp(product.seller_id, product.product_name, product.seller_name);
+                };
+            } else {
+                document.getElementById('detailEditBtn').onclick = () => {
+                    document.getElementById('productDetailPage').remove();
+                    editProductItem(product.id, product.product_name, product.description, product.condition, product.price_coins, product.location, product.image_url);
+                };
+                document.getElementById('detailDeleteBtn').onclick = async () => {
+                    if(confirm("Delete this item?")) {
+                        document.getElementById('productDetailPage').remove();
+                        if(await deleteProduct(product.id)) renderHomePage(currentSearch);
                     }
-                });
+                };
             }
-            activateTab(0);
         }
         
-        function renderUserDetailsHTML() {
-            return `
-                <div class="info-card">
-                    <div class="info-row"><span class="info-label"><i class="fas fa-user"></i> Full Name</span><span class="info-value">${escapeHtml(currentUser.name)}</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-envelope"></i> Email</span><span class="info-value">${escapeHtml(currentUser.email)}</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fab fa-whatsapp"></i> WhatsApp</span><span class="info-value">${escapeHtml(currentUser.phone)}</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-calendar"></i> Joined</span><span class="info-value">${new Date(currentUser.created_at || Date.now()).toLocaleDateString()}</span></div>
-                </div>
-            `;
-        }
-        
-        function renderLocationHTML() {
-            const loc = userLocation || { city: "Pakistan", area: "Major City" };
-            return `
-                <div class="info-card">
-                    <div class="info-row"><span class="info-label"><i class="fas fa-city"></i> City / Region</span><span class="info-value">${escapeHtml(loc.city)}</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-map-marker-alt"></i> Area / Sector</span><span class="info-value">${escapeHtml(loc.area)}</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-globe"></i> Country</span><span class="info-value">Pakistan</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-check-circle"></i> Status</span><span class="info-value">✅ Location saved permanently</span></div>
-                </div>
-            `;
-        }
-        
-        function renderAmountHTML() {
-            return `
-                <div class="info-card">
-                    <div class="info-row"><span class="info-label"><i class="fas fa-coins"></i> Available Coins</span><span class="info-value"><span style="font-size:1.5rem; font-weight:800;">${currentUser.coins}</span> 🪙</span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-ticket"></i> Redeem Code</span><span class="info-value"><button class="nav-link" onclick="document.getElementById('redeemModal').style.display='flex'" style="background:#eef2f7; padding:0.4rem 1rem;">🎫 Redeem</button></span></div>
-                    <div class="info-row"><span class="info-label"><i class="fas fa-gem"></i> Request Coins</span><span class="info-value"><button class="nav-link" onclick="window.requestCoinsAction()" style="background:#eef2f7; padding:0.4rem 1rem;">💎 Request</button></span></div>
-                </div>
-            `;
-        }
-
         let currentSearch = '';
         async function renderHomePage(searchTerm = '') {
             currentSearch = searchTerm;
+            showSkeleton();
             const products = await loadProducts(searchTerm);
+            removeSkeleton();
             if (!locationCaptured && currentUser) await captureUserLocationOnce();
             
-            const productsHTML = products.map(p => {
-                const isOwner = currentUser.id === p.seller_id;
-                const imgSrc = p.image_url || 'https://placehold.co/600x400/eef2f8/7c9bb0?text=Swap+Item';
-                return `
-                    <div class="product-card">
-                        <img class="product-image" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(p.product_name)}" onerror="this.src='https://placehold.co/600x400/eef2f8/7c9bb0?text=Image'">
-                        <div class="product-info">
-                            <div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">🪙 ${p.price_coins}</span></div>
-                            <div class="product-desc">${escapeHtml((p.description || '').substring(0, 85))}</div>
-                            <div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div>
-                            <div class="action-buttons">
-                                ${!isOwner ? `
-                                    <button class="btn-buy" data-pid="${p.id}" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-name="${escapeHtml(p.product_name).replace(/'/g, "\\'")}"><i class="fas fa-shopping-cart"></i> Buy</button>
-                                    <button class="btn-whatsapp" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fab fa-whatsapp"></i> Chat</button>
-                                    <button class="btn-swap" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fas fa-exchange-alt"></i> Swap</button>
-                                ` : `
-                                    <button class="btn-edit" data-pid="${p.id}" data-name="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-desc="${escapeHtml(p.description || '').replace(/'/g, "\\'")}" data-condition="${escapeHtml(p.condition).replace(/'/g, "\\'")}" data-price="${p.price_coins}" data-location="${escapeHtml(p.location).replace(/'/g, "\\'")}" data-image="${escapeHtml(p.image_url || '').replace(/'/g, "\\'")}"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="btn-delete" data-pid="${p.id}"><i class="fas fa-trash"></i> Delete</button>
-                                `}
-                            </div>
+            const productsHTML = products.map(p => `
+                <div class="product-card" data-product-id="${p.id}">
+                    <img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/600x400/f8fafc/8ba0bc?text=Swapify+Item')}" onerror="this.src='https://placehold.co/600x400/f8fafc/8ba0bc?text=Image'">
+                    <div class="product-info">
+                        <div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">🪙 ${p.price_coins}</span></div>
+                        <div class="product-desc">${escapeHtml((p.description || '').substring(0, 80))}</div>
+                        <div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div>
+                        <div class="action-buttons" onclick="event.stopPropagation()">
+                            ${currentUser.id !== p.seller_id ? `
+                                <button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fas fa-shopping-cart"></i> Buy</button>
+                                <button class="btn-swap" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fab fa-whatsapp"></i> Swap</button>
+                            ` : `
+                                <button class="btn-edit" data-pid="${p.id}" data-name="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-desc="${escapeHtml(p.description || '').replace(/'/g, "\\'")}" data-condition="${escapeHtml(p.condition).replace(/'/g, "\\'")}" data-price="${p.price_coins}" data-location="${escapeHtml(p.location).replace(/'/g, "\\'")}" data-image="${escapeHtml(p.image_url || '').replace(/'/g, "\\'")}"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn-delete" data-pid="${p.id}"><i class="fas fa-trash"></i> Delete</button>
+                            `}
                         </div>
                     </div>
-                `;
-            }).join('');
-            
-            const emptyMsg = products.length === 0 ? `<div style="text-align:center; background:white; border-radius:40px; padding:2rem;"><i class="fas fa-store-slash fa-3x" style="color:#8ba5bc;"></i><p style="margin-top:1rem;">No items found. List your first swap item!</p></div>` : '';
+                </div>
+            `).join('');
             
             document.getElementById('root').innerHTML = `
-                <nav class="navbar"><div class="nav-container"><div class="logo"><i class="fas fa-exchange-alt"></i> Swapify.pk</div>
-                <div class="nav-links"><button class="nav-link" onclick="window.renderHomePage()"><i class="fas fa-store"></i> Market</button><button class="nav-link" onclick="window.openSellModal()"><i class="fas fa-plus-circle"></i> Sell</button><span class="coin-badge"><i class="fas fa-coins"></i> ${currentUser.coins}</span><button class="nav-link" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Exit</button></div></div></nav>
-                <div class="container">
-                    <div class="search-wrapper"><i class="fas fa-search" style="margin-left:0.5rem;"></i><input type="text" id="searchInput" placeholder="Search phones, bikes, clothes, electronics..." value="${escapeHtml(searchTerm)}"><button id="searchBtn">Search</button></div>
-                    
-                    <div class="info-tabs-section">
-                        <div class="tabs-header"><button class="tab-btn" data-tab="0">Coins</button><button class="tab-btn" data-tab="1">My Details</button><button class="tab-btn" data-tab="2">My Area</button></div>
-                        <div class="tab-content"><div id="tab0" class="tab-pane">${renderAmountHTML()}</div><div id="tab1" class="tab-pane">${renderUserDetailsHTML()}</div><div id="tab2" class="tab-pane">${renderLocationHTML()}</div></div>
-                    </div>
-                    
-                    <div class="products-grid">${products.length ? productsHTML : emptyMsg}</div>
-                </div>
-                <div class="footer"><i class="fas fa-handshake"></i> Swapify — Trusted peer swap • Location saved once • Swap directly via WhatsApp</div>
-                
-                <!-- Sell Modal -->
-                <div id="sellModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-modal" onclick="closeModal('sellModal')">&times;</span>
-                        <h3><i class="fas fa-plus-circle"></i> List New Item</h3>
-                        <form id="productForm">
-                            <input type="text" id="prodName" placeholder="Product name *" required>
-                            <textarea id="prodDesc" rows="2" placeholder="Description (optional)"></textarea>
-                            <input type="text" id="prodCondition" placeholder="Condition" value="Like New">
-                            <input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required>
-                            <input type="text" id="prodLocation" placeholder="Location" value="${userLocation?.city || 'Pakistan'}">
-                            <div class="upload-zone" onclick="document.getElementById('imageFile').click()">
-                                <i class="fas fa-cloud-upload-alt"></i> Click to upload image (optional)
-                            </div>
-                            <input type="file" id="imageFile" accept="image/*" style="display:none">
-                            <div id="imagePreviewDiv" class="preview-img"></div>
-                            <input type="hidden" id="editIdHidden">
-                            <input type="hidden" id="imageBase64Hidden">
-                            <button type="submit" class="modal-btn modal-btn-primary"><i class="fas fa-paper-plane"></i> Publish Listing</button>
-                        </form>
-                    </div>
-                </div>
-                
-                <!-- Redeem Modal -->
-                <div id="redeemModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close-modal" onclick="closeModal('redeemModal')">&times;</span>
-                        <h3><i class="fas fa-ticket-alt"></i> Redeem Code</h3>
-                        <input type="text" id="codeInput" placeholder="Enter your secret code" style="text-align:center; font-size:1rem;">
-                        <button id="redeemBtn" class="modal-btn modal-btn-primary"><i class="fas fa-gift"></i> Redeem Now</button>
-                        <p style="text-align:center; font-size:0.7rem; color:#8ba5bc; margin-top:1rem;">Available codes: H646CVHDG6, SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p>
-                    </div>
-                </div>
-            `;
+    <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img src="https://img.icons8.com/ios-filled/100/2d2d2d/swap.png" alt="Swapify" style="width:36px; height:36px;"><span class="logo-text">Swapify</span></div><div class="header-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" id="headerSearchInput" placeholder="Search phones, bikes..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><i class="fas fa-coins"></i> ${currentUser.coins} <i class="fas fa-plus-circle" style="font-size:0.7rem;"></i></span><button class="nav-icon-btn" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
+    <div class="icon-bar"><button class="icon-item" id="sellIconBtn"><i class="fas fa-plus-circle"></i><span>Sell</span></button><button class="icon-item" id="coinsIconBtn"><i class="fas fa-coins"></i><span>Coins</span></button><button class="icon-item" id="redeemIconBtn"><i class="fas fa-ticket-alt"></i><span>Redeem</span></button></div>
+    <div class="container"><div class="products-grid">${products.length ? productsHTML : '<div style="text-align:center; padding:2rem;">No items found</div>'}</div></div>
+    <div class="footer"><i class="fas fa-handshake"></i> Swapify — Click any product for professional details</div>
+    <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="text" id="prodCondition" placeholder="Condition" value="Like New"><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><input type="text" id="prodLocation" placeholder="Location" value="${userLocation?.city || 'Pakistan'}"><div class="upload-zone" onclick="document.getElementById('imageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Click to upload image</div><input type="file" id="imageFile" accept="image/*" style="display:none"><div id="imagePreviewDiv" class="preview-img"></div><input type="hidden" id="editIdHidden"><input type="hidden" id="imageBase64Hidden"><button type="submit" class="modal-btn">Publish</button></form></div></div>
+    <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('redeemModal')">&times;</span><h3>Redeem Code</h3><input type="text" id="codeInput" placeholder="Enter secret code"><button id="redeemBtn" class="modal-btn">Redeem Now</button><p style="text-align:center; font-size:0.65rem; margin-top:0.8rem;">Codes: H646CVHDG6, SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
+    <div id="requestCoinsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('requestCoinsModal')">&times;</span><h3><i class="fas fa-hand-holding-heart"></i> Request Coins</h3><input type="number" id="reqAmount" placeholder="Amount of coins" min="10" step="10"><textarea id="reqReason" rows="3" placeholder="Why do you need coins? (e.g., want to buy an item, promotion, etc.)"></textarea><button id="submitRequestBtn" class="modal-btn">Submit Request via WhatsApp</button><p style="font-size:0.7rem; color:#666; margin-top:0.8rem;">Your request will be sent to admin on WhatsApp for review.</p></div></div>
+    <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>🪙 Coins:</span><span><strong>${currentUser.coins}</strong></span></div><div class="info-row"><span>Location:</span><span>${userLocation?.city || 'Pakistan'}</span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
             
-            initTabs();
-            document.getElementById('searchBtn').onclick = () => renderHomePage(document.getElementById('searchInput').value);
+            attachEvents(products);
+        }
+        
+        function attachEvents(products) {
+            document.getElementById('headerSearchBtn').onclick = () => renderHomePage(document.getElementById('headerSearchInput').value);
+            document.getElementById('headerSearchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') renderHomePage(e.target.value); });
             document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('swapify_user'); currentUser = null; renderLoginPage(); };
-            document.getElementById('profileBtn').onclick = () => showProfileModal();
-            document.getElementById('redeemBtn').onclick = async () => { 
-                const code = document.getElementById('codeInput').value;
-                if(await redeemCode(code)){ 
-                    closeModal('redeemModal'); 
-                    renderHomePage(currentSearch); 
-                }
+            document.getElementById('profileBtn').onclick = () => { document.getElementById('profileModalView').style.display = 'flex'; };
+            document.getElementById('sellIconBtn').onclick = () => openSellModal();
+            document.getElementById('coinsIconBtn').onclick = () => { showToast(`💰 Balance: ${currentUser.coins} coins`, false); };
+            document.getElementById('redeemIconBtn').onclick = () => { document.getElementById('redeemModal').style.display = 'flex'; };
+            document.getElementById('requestCoinsBtn').onclick = () => { document.getElementById('requestCoinsModal').style.display = 'flex'; };
+            document.getElementById('submitRequestBtn').onclick = () => {
+                const amount = parseInt(document.getElementById('reqAmount').value);
+                const reason = document.getElementById('reqReason').value;
+                if(!amount || amount < 10) { showToast("Please enter valid amount (min 10)", true); return; }
+                if(!reason.trim()) { showToast("Please provide a reason", true); return; }
+                requestCoinsViaWhatsApp(amount, reason);
+                closeModal('requestCoinsModal');
+                document.getElementById('reqAmount').value = '';
+                document.getElementById('reqReason').value = '';
             };
+            document.getElementById('redeemBtn').onclick = async () => { const code = document.getElementById('codeInput').value; if(await redeemCode(code)){ closeModal('redeemModal'); renderHomePage(currentSearch); } };
             
-            // attach dynamic events
-            document.querySelectorAll('.btn-buy').forEach(btn => btn.onclick = (e) => { quickBuy(btn.dataset.pid, btn.dataset.sid, parseInt(btn.dataset.price), btn.dataset.name); });
-            document.querySelectorAll('.btn-whatsapp').forEach(btn => btn.onclick = (e) => { contactSeller(btn.dataset.sid, btn.dataset.pname, btn.dataset.sname); });
-            document.querySelectorAll('.btn-swap').forEach(btn => btn.onclick = (e) => { directSwapToWhatsApp(btn.dataset.sid, btn.dataset.pname, btn.dataset.sname); });
-            document.querySelectorAll('.btn-edit').forEach(btn => btn.onclick = (e) => { 
-                editProductItem(btn.dataset.pid, btn.dataset.name, btn.dataset.desc, btn.dataset.condition, btn.dataset.price, btn.dataset.location, btn.dataset.image); 
+            document.querySelectorAll('.product-card').forEach(card => {
+                const productId = card.dataset.productId;
+                const product = cachedProducts.find(p => p.id === productId);
+                if(product) card.addEventListener('click', (e) => { if(!e.target.closest('.action-buttons')) showProductDetail(product); });
             });
-            document.querySelectorAll('.btn-delete').forEach(btn => btn.onclick = async (e) => { 
-                if(confirm("Delete this product?")) 
-                    if(await deleteProduct(btn.dataset.pid)) renderHomePage(currentSearch); 
-            });
+            
+            document.querySelectorAll('.btn-buy').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); purchaseRedirectToWhatsApp(btn.dataset.sid, btn.dataset.pname, parseInt(btn.dataset.price), btn.dataset.sname); });
+            document.querySelectorAll('.btn-swap').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); directSwapToWhatsApp(btn.dataset.sid, btn.dataset.pname, btn.dataset.sname); });
+            document.querySelectorAll('.btn-edit').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); editProductItem(btn.dataset.pid, btn.dataset.name, btn.dataset.desc, btn.dataset.condition, btn.dataset.price, btn.dataset.location, btn.dataset.image); });
+            document.querySelectorAll('.btn-delete').forEach(btn => btn.onclick = async (e) => { e.stopPropagation(); if(confirm("Delete?")) if(await deleteProduct(btn.dataset.pid)) renderHomePage(currentSearch); });
             
             document.getElementById('productForm').onsubmit = async (e) => {
                 e.preventDefault();
                 const editId = document.getElementById('editIdHidden').value;
-                const data = { 
-                    productName: document.getElementById('prodName').value, 
-                    description: document.getElementById('prodDesc').value, 
-                    condition: document.getElementById('prodCondition').value, 
-                    priceCoins: parseInt(document.getElementById('prodPrice').value), 
-                    location: document.getElementById('prodLocation').value, 
-                    imageUrl: document.getElementById('imageBase64Hidden').value 
-                };
-                if(!data.productName || data.priceCoins<1) { showToast("Product name and valid price required", true); return; }
-                let ok = editId ? await updateProduct(editId, { 
-                    product_name: data.productName, 
-                    description: data.description, 
-                    condition: data.condition, 
-                    price_coins: data.priceCoins, 
-                    location: data.location, 
-                    image_url: data.imageUrl 
-                }) : await addProduct(data);
+                const data = { productName: document.getElementById('prodName').value, description: document.getElementById('prodDesc').value, condition: document.getElementById('prodCondition').value, priceCoins: parseInt(document.getElementById('prodPrice').value), location: document.getElementById('prodLocation').value, imageUrl: document.getElementById('imageBase64Hidden').value };
+                if(!data.productName || data.priceCoins<1) { showToast("Valid name & price needed", true); return; }
+                let ok = editId ? await updateProduct(editId, { product_name: data.productName, description: data.description, condition: data.condition, price_coins: data.priceCoins, location: data.location, image_url: data.imageUrl }) : await addProduct(data);
                 if(ok) { closeModal('sellModal'); renderHomePage(currentSearch); }
             };
-            document.getElementById('imageFile').onchange = async (e) => { 
-                if(e.target.files[0]){
-                    if(e.target.files[0].size > 1 * 1024 * 1024) { showToast("Image max 1MB", true); return; }
-                    const b64 = await imageToBase64(e.target.files[0]); 
-                    document.getElementById('imageBase64Hidden').value = b64; 
-                    document.getElementById('imagePreviewDiv').innerHTML = `<img src="${b64}" style="max-width:100%; border-radius:20px;">`; 
-                }
-            };
+            document.getElementById('imageFile').onchange = async (e) => { if(e.target.files[0]){ if(e.target.files[0].size > 1*1024*1024) { showToast("Max 1MB", true); return; } const b64 = await imageToBase64(e.target.files[0]); document.getElementById('imageBase64Hidden').value = b64; document.getElementById('imagePreviewDiv').innerHTML = `<img src="${b64}">`; } };
         }
         
-        function editProductItem(id,name,desc,condition,price,location,image){
-            document.getElementById('modalTitle') && (document.getElementById('modalTitle').innerText = '✏️ Edit Product');
+        function editProductItem(id, name, desc, condition, price, location, image) {
             document.getElementById('editIdHidden').value = id;
             document.getElementById('prodName').value = name;
             document.getElementById('prodDesc').value = desc;
             document.getElementById('prodCondition').value = condition;
             document.getElementById('prodPrice').value = price;
             document.getElementById('prodLocation').value = location;
-            if(image && image !== 'null' && image !== ''){
-                document.getElementById('imageBase64Hidden').value = image;
-                document.getElementById('imagePreviewDiv').innerHTML = `<img src="${image}" style="max-width:100%; border-radius:20px;">`;
-            } else {
-                document.getElementById('imageBase64Hidden').value = '';
-                document.getElementById('imagePreviewDiv').innerHTML = '';
-            }
+            if(image && image !== 'null') { document.getElementById('imageBase64Hidden').value = image; document.getElementById('imagePreviewDiv').innerHTML = `<img src="${image}">`; }
+            else { document.getElementById('imageBase64Hidden').value = ''; document.getElementById('imagePreviewDiv').innerHTML = ''; }
             document.getElementById('sellModal').style.display = 'flex';
         }
-        
-        window.renderHomePage = renderHomePage;
-        window.openSellModal = () => { 
-            document.getElementById('editIdHidden').value = '';
-            document.getElementById('productForm').reset();
-            document.getElementById('imageBase64Hidden').value = '';
-            document.getElementById('imagePreviewDiv').innerHTML = '';
-            document.getElementById('sellModal').style.display = 'flex'; 
-        };
-        window.requestCoinsAction = () => { 
-            let amt = prompt("Request coins (max 2000)", "100"); 
-            if(amt && !isNaN(amt) && amt > 0 && amt <= 2000) 
-                window.open(`https://wa.me/9233618771497?text=${encodeURIComponent(`Hi Swapify, I need ${amt} coins. Name: ${currentUser.name}, Email: ${currentUser.email}`)}`,'_blank'); 
-            else if(amt > 2000) showToast("Maximum 2000 coins per request", true);
-        };
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        window.closeModal = closeModal;
+        function openSellModal() { document.getElementById('editIdHidden').value = ''; document.getElementById('productForm').reset(); document.getElementById('imageBase64Hidden').value = ''; document.getElementById('imagePreviewDiv').innerHTML = ''; document.getElementById('sellModal').style.display = 'flex'; }
+        function closeModal(id) { if(document.getElementById(id)) document.getElementById(id).style.display = 'none'; }
+        window.closeModal = closeModal; window.openSellModal = openSellModal;
         
         async function renderLoginPage() {
-            document.getElementById('root').innerHTML = `
-                <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #eef2f8 0%, #e2e8f0 100%); padding:1.5rem;">
-                    <div style="background:white; border-radius:56px; max-width:440px; width:90%; padding:2rem; box-shadow:0 30px 50px -20px rgba(0,0,0,0.2);">
-                        <div style="text-align:center;">
-                            <i class="fas fa-handshake fa-3x" style="color:#1e6f5c;"></i>
-                            <h1 style="margin:12px 0 6px; font-size:2rem;">Swapify</h1>
-                            <p style="color:#6b8aac;">Pakistan's trusted swap marketplace</p>
-                        </div>
-                        <div style="display:flex; gap:12px; margin:28px 0 20px;">
-                            <button id="showLoginTab" class="modal-btn modal-btn-primary" style="margin:0;">Sign In</button>
-                            <button id="showSignupTab" class="modal-btn modal-btn-secondary" style="margin:0;">Sign Up</button>
-                        </div>
-                        <div id="loginPanel">
-                            <input type="email" id="loginEmail" placeholder="Email address">
-                            <input type="password" id="loginPassword" placeholder="Password">
-                            <button id="doLoginBtn" class="modal-btn modal-btn-primary">Login →</button>
-                        </div>
-                        <div id="signupPanel" style="display:none;">
-                            <input type="text" id="signName" placeholder="Full name">
-                            <input type="email" id="signEmail" placeholder="Email">
-                            <input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)">
-                            <input type="password" id="signPassword" placeholder="Password (min 6)">
-                            <button id="doSignupBtn" class="modal-btn modal-btn-primary">Create Account (100 free coins)</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
+            document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:#ffffff; padding:1rem;"><div style="background:white; border-radius:48px; max-width:400px; width:90%; padding:1.8rem; box-shadow:0 20px 35px -15px rgba(0,0,0,0.08); border:1px solid #eef2f8;"><div style="text-align:center;"><i class="fas fa-handshake fa-3x" style="color:#2d2d2d;"></i><h1 style="margin:10px 0;">Swapify</h1><p style="color:#6c819a;">Pakistan's trusted swap marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#f1f5f9; color:#1a1a1a;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login →</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password (min 6)"><button id="doSignupBtn" class="modal-btn">Create Account (100 free coins)</button></div></div></div>`;
             document.getElementById('showLoginTab').onclick = () => { document.getElementById('loginPanel').style.display='block'; document.getElementById('signupPanel').style.display='none'; };
             document.getElementById('showSignupTab').onclick = () => { document.getElementById('loginPanel').style.display='none'; document.getElementById('signupPanel').style.display='block'; };
-            document.getElementById('doLoginBtn').onclick = async () => { 
-                const res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); 
-                if(res.success){ 
-                    currentUser = res.user; 
-                    await captureUserLocationOnce(); 
-                    localStorage.setItem('swapify_user', JSON.stringify(currentUser)); 
-                    renderHomePage(); 
-                } else showToast(res.message, true); 
-            };
-            document.getElementById('doSignupBtn').onclick = async () => { 
-                const res = await registerUser(
-                    document.getElementById('signName').value,
-                    document.getElementById('signEmail').value,
-                    document.getElementById('signPhone').value,
-                    document.getElementById('signPassword').value
-                ); 
-                if(res.success){ 
-                    currentUser = res.user; 
-                    await captureUserLocationOnce(); 
-                    localStorage.setItem('swapify_user', JSON.stringify(currentUser)); 
-                    renderHomePage(); 
-                } else showToast(res.message, true); 
-            };
+            document.getElementById('doLoginBtn').onclick = async () => { let res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } else showToast(res.message, true); };
+            document.getElementById('doSignupBtn').onclick = async () => { let res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } else showToast(res.message, true); };
         }
         
-        const saved = localStorage.getItem('swapify_user');
-        if(saved) { 
-            try { 
-                currentUser = JSON.parse(saved); 
-                (async()=>{ 
-                    const storedLoc = localStorage.getItem(`swapify_loc_${currentUser.id}`); 
-                    if(storedLoc){ 
-                        userLocation = JSON.parse(storedLoc); 
-                        locationCaptured = true; 
-                    } else await captureUserLocationOnce(); 
-                    renderHomePage(); 
-                })(); 
-            } catch(e){ renderLoginPage(); } 
-        } else renderLoginPage();
+        const savedUser = localStorage.getItem('swapify_user');
+        if(savedUser) { try { currentUser = JSON.parse(savedUser); (async()=>{ const storedLoc = localStorage.getItem(`swapify_loc_${currentUser.id}`); if(storedLoc){ userLocation=JSON.parse(storedLoc); locationCaptured=true; } else await captureUserLocationOnce(); renderHomePage(); })(); } catch(e){ renderLoginPage(); } } else renderLoginPage();
+        setTimeout(() => hideLoader(), 400);
     })();
 </script>
 </body>
