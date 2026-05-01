@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        .container
         * {
             margin: 0;
             padding: 0;
@@ -155,6 +156,7 @@
         .header-actions {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.6rem;
             flex-wrap: wrap;
         }
@@ -196,7 +198,7 @@
             margin: 0.6rem 0.8rem 1rem 0.8rem;
             padding: 0.3rem 0.6rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 0.2rem;
         }
@@ -220,7 +222,7 @@
         #sellIconBtn { background: #f1f5f9; border: 1px solid #e2e8f0; }
 
         /* Products Grid */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 0.5rem; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0.1rem; }
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -262,7 +264,7 @@
         }
         .btn-buy:hover, .btn-swap:hover, .btn-edit:hover, .btn-delete:hover { background: #1a1a1a; transform: translateY(-2px); }
 
-        /* ========== PRODUCT DETAIL PAGE - PROFESSIONAL LAYOUT ========== */
+        /* ========== PRODUCT DETAIL PAGE ========== */
         .product-detail-page {
             position: fixed;
             top: 0;
@@ -303,14 +305,13 @@
         }
         .back-btn:hover { background: #e2e8f0; transform: scale(1.05); }
         
-        /* Desktop: image left, details right */
         .detail-grid {
             max-width: 1200px;
-            padding: 0.4rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
             align-items: start;
+            padding: 2rem;
         }
         .detail-image-section {
             position: sticky;
@@ -370,7 +371,7 @@
         .detail-btn {
             flex: 1;
             padding: 1rem;
-            border-radius: 60px;
+            border-radius: 42px;
             font-weight: 700;
             font-size: 1rem;
             border: none;
@@ -382,21 +383,43 @@
             gap: 10px;
         }
         .detail-btn-buy { background: #2d2d2d; color: white; }
-        .detail-btn-swap { background: #25D366; color: #1a1a1a; }
-        .detail-btn-buy:hover, .detail-btn-swap:hover { transform: translateY(-3px); filter: brightness(0.96); }
+        .detail-btn-swap { background: #25D366; color: white; }
+        .detail-btn-edit { background: #3b82f6; color: white; }
+        .detail-btn-delete { background: #dc2626; color: white; }
+        .detail-btn-buy:hover, .detail-btn-swap:hover, .detail-btn-edit:hover, .detail-btn-delete:hover { transform: translateY(-3px); filter: brightness(0.96); }
         
-        /* Mobile: image top, details below */
         @media (max-width: 768px) {
-            .detail-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                padding: 0.2rem;
-                margin: 1rem auto;
-            }
-            .detail-image-section {
-                position: relative;
-                top: 0;
-            }
+    .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0.6rem;
+    }
+
+    .detail-image-section {
+        position: relative;
+        top: 0;
+        width: 100%;
+    }
+
+    .detail-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        min-height: auto;
+        object-fit: contain;
+        display: block;
+        border-radius: 16px;
+    }
+
+    .detail-image img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+        border-radius: 16px;
+    }
+
             .detail-title { font-size: 1.6rem; }
             .detail-price { font-size: 1.3rem; }
             .detail-desc { font-size: 0.9rem; }
@@ -434,6 +457,13 @@
             margin: 0.5rem 0;
             border: 1.5px solid #e2e8f0;
             border-radius: 40px;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 0.9rem;
+        }
+        .modal-content input:focus, .modal-content textarea:focus {
+            outline: none;
+            border-color: #2d2d2d;
+            box-shadow: 0 0 0 3px rgba(45, 45, 45, 0.1);
         }
         .upload-zone {
             background: #fafcff;
@@ -513,13 +543,29 @@
             font-size: 0.75rem;
             color: #4a5b6e;
         }
+        
+        #loginPanel input, #signupPanel input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 40px;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        #loginPanel input:focus, #signupPanel input:focus {
+            outline: none;
+            border-color: #2d2d2d;
+            box-shadow: 0 0 0 3px rgba(45, 45, 45, 0.1);
+        }
+        
         @media (max-width: 400px) {
             .products-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; }
             .product-image { height: 130px; }
             .product-title { font-size: 0.75rem; }
         }
      
-        /* Fix header search on small devices (under 500px) */
         @media (max-width: 550px) {
             .nav-container {
                 padding: 0.6rem 0.8rem;
@@ -554,7 +600,7 @@
             }
             .header-actions {
                 width: 100%;
-                justify-content: flex-end;
+                justify-content: center;
                 gap: 0.5rem;
             }
             .coin-badge-header {
@@ -568,6 +614,7 @@
             .icon-bar {
                 margin: 0.5rem 0.6rem 0.8rem 0.6rem;
                 padding: 0.25rem 0.5rem;
+                justify-content: center;
             }
             .icon-item {
                 padding: 0.3rem 0.5rem;
@@ -578,7 +625,6 @@
             }
         }
 
-        /* Under 380px - more compact */
         @media (max-width: 380px) {
             .coin-badge-header {
                 padding: 0.25rem 0.6rem;
@@ -608,6 +654,9 @@
         let cachedProducts = [];
         let userLocation = null;
         let locationCaptured = false;
+        let productsCache = null;
+        let productsCacheTime = 0;
+        const CACHE_DURATION = 5 * 60 * 1000;
 
         function showLoader() {
             let loader = document.getElementById('globalLoader');
@@ -624,10 +673,15 @@
         function showSkeleton() {
             const root = document.getElementById('root');
             if (!root || document.querySelector('.skeleton-grid')) return;
-            root.insertAdjacentHTML('beforeend', `<div class="skeleton-grid" id="skeletonGrid">${Array(6).fill(0).map(() => `<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text"></div></div>`).join('')}</div>`);
+            root.innerHTML = `<div class="skeleton-grid" id="skeletonGrid">${Array(6).fill(0).map(() => `<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div><div class="skeleton-text"></div></div>`).join('')}</div>`;
         }
-        function removeSkeleton() { document.getElementById('skeletonGrid')?.remove(); }
+        function removeSkeleton() { }
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+        function truncateDescription(desc, limit = 28) {
+            if (!desc) return '';
+            if (desc.length <= limit) return desc;
+            return desc.substring(0, limit) + '....';
+        }
         function showToast(msg, isErr=false) { 
             let div = document.createElement('div'); div.className = 'toast'; 
             div.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(msg)}`; 
@@ -679,16 +733,25 @@
         }
         
         async function loadProducts(search = '') {
+            const now = Date.now();
+            if (productsCache && (now - productsCacheTime) < CACHE_DURATION && !search) {
+                cachedProducts = productsCache;
+                return cachedProducts;
+            }
+            
             let query = supabase.from('products').select('*').eq('status', 'available');
             if (search) query = query.ilike('product_name', `%${search}%`);
             const { data, error } = await query.order('created_at', { ascending: false });
             if (error) return [];
             cachedProducts = data || [];
+            if (!search) {
+                productsCache = cachedProducts;
+                productsCacheTime = now;
+            }
             return cachedProducts;
         }
         
         async function addProduct(product) {
-            showLoader();
             const newProduct = {
                 id: generateId(),
                 product_name: product.productName.trim(),
@@ -703,43 +766,38 @@
                 status: 'available'
             };
             const { error } = await supabase.from('products').insert([newProduct]);
-            hideLoader();
             if (error) { showToast("Failed: " + error.message, true); return false; }
-            showToast("✨ Item listed!", false);
+            productsCache = null;
+            showToast("Item listed!", false);
             return true;
         }
         
         async function updateProduct(productId, updates) {
-            showLoader();
             const { error } = await supabase.from('products').update(updates).eq('id', productId).eq('seller_id', currentUser.id);
-            hideLoader();
             if (error) { showToast("Update failed", true); return false; }
-            showToast("✅ Updated", false);
+            productsCache = null;
+            showToast("Updated", false);
             return true;
         }
         
         async function deleteProduct(productId) {
-            showLoader();
             const { error } = await supabase.from('products').delete().eq('id', productId).eq('seller_id', currentUser.id);
-            hideLoader();
             if (error) return false;
-            showToast("🗑️ Removed", false);
+            productsCache = null;
+            showToast("Removed", false);
             return true;
         }
         
         async function loginUser(email, password) {
-            showLoader();
             const { data, error } = await supabase.from('users').select('*').eq('email', email).eq('password', password);
-            hideLoader();
             if (error || !data || data.length === 0) return { success: false, message: "Invalid email/password" };
             return { success: true, user: data[0] };
         }
         
         async function registerUser(name, email, phone, password) {
             if (!isValidPakistanPhone(phone)) return { success: false, message: "WhatsApp must be +92xxxxxxxxxx" };
-            showLoader();
             const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length) { hideLoader(); return { success: false, message: "Email already used" }; }
+            if (existing && existing.length) { return { success: false, message: "Email already used" }; }
             const newUser = {
                 id: generateId(),
                 name: name.trim(),
@@ -751,7 +809,6 @@
                 used_codes: {}
             };
             const { error } = await supabase.from('users').insert([newUser]);
-            hideLoader();
             if (error) return { success: false, message: error.message };
             return { success: true, user: newUser };
         }
@@ -760,54 +817,46 @@
             const validCodes = { 'H646CVHDG6': 500, 'SWAPIFY100': 100, 'WELCOME50': 50, 'GOLD200': 200, 'TRADEPK': 150 };
             const upper = code.toUpperCase();
             if (!validCodes[upper]) { showToast("Invalid code", true); return false; }
-            showLoader();
             const { data: u } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
             const used = u.used_codes || {};
-            if (used[upper]) { hideLoader(); showToast("Already redeemed", true); return false; }
+            if (used[upper]) { showToast("Already redeemed", true); return false; }
             const newCoins = u.coins + validCodes[upper];
             used[upper] = new Date();
             const { error } = await supabase.from('users').update({ coins: newCoins, used_codes: used }).eq('id', currentUser.id);
-            hideLoader();
             if (error) return false;
             currentUser.coins = newCoins;
             localStorage.setItem('swapify_user', JSON.stringify(currentUser));
-            showToast(`🎉 +${validCodes[upper]} coins! Balance: ${newCoins}`, false);
+            showToast(`+${validCodes[upper]} coins! Balance: ${newCoins}`, false);
             return true;
         }
         
-        // Request Coins - redirect to WhatsApp admin
         function requestCoinsViaWhatsApp(amount, reason) {
-            const adminWhatsApp = "+923432021486"; // Admin number - replace with actual
-            const message = `🪙 *COIN REQUEST* - Swapify\n\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nPhone: ${currentUser.phone}\nRequested Coins: ${amount}\nReason: ${reason}\n\nPlease review and add coins.`;
+            const adminWhatsApp = "+923432021486";
+            const message = `*COIN REQUEST* - Swapify\n\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nPhone: ${currentUser.phone}\nRequested Coins: ${amount}\nReason: ${reason}\n\nPlease review and add coins.`;
             const url = `https://wa.me/${adminWhatsApp.replace('+', '')}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
-            showToast(`📱 Request sent to admin via WhatsApp`, false);
+            showToast(`Request sent to admin via WhatsApp`, false);
             return true;
         }
         
         async function purchaseRedirectToWhatsApp(sellerId, productName, priceCoins, sellerName) {
             if (currentUser.coins < priceCoins) { showToast(`Insufficient coins! Need ${priceCoins} coins.`, true); return; }
             if (currentUser.id === sellerId) { showToast("You cannot purchase your own item", true); return; }
-            showLoader();
             const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
-            hideLoader();
             if (!sellerInfo?.phone) { showToast("Seller contact not available", true); return; }
-            const message = `🛍️ *BUY REQUEST* (Swapify)\n\nProduct: "${productName}"\nPrice: ${priceCoins} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}\nLocation: ${userLocation?.city || 'Pakistan'}`;
+            const message = `*BUY REQUEST* (Swapify)\n\nProduct: "${productName}"\nPrice: ${priceCoins} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}\nLocation: ${userLocation?.city || 'Pakistan'}`;
             window.open(`https://wa.me/${sellerInfo.phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
-            showToast(`📲 Inquiry sent to ${sellerName}`, false);
+            showToast(`Inquiry sent to ${sellerName}`, false);
         }
         
         async function directSwapToWhatsApp(sellerId, targetProductName, sellerName) {
-            showLoader();
             const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
-            hideLoader();
             let phoneRaw = sellerInfo?.phone?.replace('+', '') || '923000000000';
-            const message = `🔄 SWAP REQUEST (Swapify)\n\n${currentUser.name} wants to swap.\nMy WhatsApp: ${currentUser.phone}\nProduct: "${targetProductName}"`;
+            const message = `SWAP REQUEST (Swapify)\n\n${currentUser.name} wants to swap.\nMy WhatsApp: ${currentUser.phone}\nProduct: "${targetProductName}"`;
             window.open(`https://wa.me/${phoneRaw}?text=${encodeURIComponent(message)}`, '_blank');
-            showToast(`💬 Swap request sent to ${sellerName}`, false);
+            showToast(`Swap request sent to ${sellerName}`, false);
         }
         
-        // Professional Product Detail View (Desktop: image left, details right)
         function showProductDetail(product) {
             const isOwner = currentUser.id === product.seller_id;
             const imgSrc = product.image_url || 'https://placehold.co/800x600/f8fafc/8ba0bc?text=Swap+Item';
@@ -823,7 +872,7 @@
                         </div>
                         <div class="detail-info-section">
                             <h1 class="detail-title">${escapeHtml(product.product_name)}</h1>
-                            <div class="detail-price">🪙 ${product.price_coins} Coins</div>
+                            <div class="detail-price">${product.price_coins} Coins</div>
                             <div class="detail-desc">${escapeHtml(product.description || 'No description provided.')}</div>
                             <div class="detail-seller-card">
                                 <p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p>
@@ -832,13 +881,13 @@
                             </div>
                             ${!isOwner ? `
                                 <div class="detail-buttons">
-                                    <button class="detail-btn detail-btn-buy" id="detailBuyBtn"><i class="fas fa-shopping-cart"></i> Buy Now</button>
-                                    <button class="detail-btn detail-btn-swap" id="detailSwapBtn"><i class="fab fa-whatsapp"></i> Swap on WhatsApp</button>
+                                    <button class="detail-btn detail-btn-buy" id="detailBuyBtn">Buy Now</button>
+                                    <button class="detail-btn detail-btn-swap" id="detailSwapBtn">Swap on WhatsApp</button>
                                 </div>
                             ` : `
                                 <div class="detail-buttons">
-                                    <button class="detail-btn detail-btn-buy" id="detailEditBtn" style="background:#3b82f6;"><i class="fas fa-edit"></i> Edit Item</button>
-                                    <button class="detail-btn detail-btn-swap" id="detailDeleteBtn" style="background:#dc2626;"><i class="fas fa-trash"></i> Delete Item</button>
+                                    <button class="detail-btn detail-btn-edit" id="detailEditBtn">Edit Item</button>
+                                    <button class="detail-btn detail-btn-delete" id="detailDeleteBtn">Delete Item</button>
                                 </div>
                             `}
                         </div>
@@ -873,30 +922,30 @@
         let currentSearch = '';
         async function renderHomePage(searchTerm = '') {
             currentSearch = searchTerm;
-            showSkeleton();
             const products = await loadProducts(searchTerm);
-            removeSkeleton();
             if (!locationCaptured && currentUser) await captureUserLocationOnce();
             
-            const productsHTML = products.map(p => `
+            const productsHTML = products.map(p => {
+                const shortDesc = truncateDescription(p.description, 28);
+                return `
                 <div class="product-card" data-product-id="${p.id}">
                     <img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/600x400/f8fafc/8ba0bc?text=Swapify+Item')}" onerror="this.src='https://placehold.co/600x400/f8fafc/8ba0bc?text=Image'">
                     <div class="product-info">
-                        <div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">🪙 ${p.price_coins}</span></div>
-                        <div class="product-desc">${escapeHtml((p.description || '').substring(0, 80))}</div>
+                        <div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins} Coins</span></div>
+                        <div class="product-desc">${escapeHtml(shortDesc)}</div>
                         <div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div>
                         <div class="action-buttons" onclick="event.stopPropagation()">
                             ${currentUser.id !== p.seller_id ? `
-                                <button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fas fa-shopping-cart"></i> Buy</button>
-                                <button class="btn-swap" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}"><i class="fab fa-whatsapp"></i> Swap</button>
+                                <button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Buy</button>
+                                <button class="btn-swap" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Swap</button>
                             ` : `
-                                <button class="btn-edit" data-pid="${p.id}" data-name="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-desc="${escapeHtml(p.description || '').replace(/'/g, "\\'")}" data-condition="${escapeHtml(p.condition).replace(/'/g, "\\'")}" data-price="${p.price_coins}" data-location="${escapeHtml(p.location).replace(/'/g, "\\'")}" data-image="${escapeHtml(p.image_url || '').replace(/'/g, "\\'")}"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn-delete" data-pid="${p.id}"><i class="fas fa-trash"></i> Delete</button>
+                                <button class="btn-edit" data-pid="${p.id}" data-name="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-desc="${escapeHtml(p.description || '').replace(/'/g, "\\'")}" data-condition="${escapeHtml(p.condition).replace(/'/g, "\\'")}" data-price="${p.price_coins}" data-location="${escapeHtml(p.location).replace(/'/g, "\\'")}" data-image="${escapeHtml(p.image_url || '').replace(/'/g, "\\'")}">Edit</button>
+                                <button class="btn-delete" data-pid="${p.id}">Delete</button>
                             `}
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
             
             document.getElementById('root').innerHTML = `
     <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img src="https://img.icons8.com/ios-filled/100/2d2d2d/swap.png" alt="Swapify" style="width:36px; height:36px;"><span class="logo-text">Swapify</span></div><div class="header-search"><i class="fas fa-search" style="color:#94a3b8;"></i><input type="text" id="headerSearchInput" placeholder="Search phones, bikes..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><i class="fas fa-coins"></i> ${currentUser.coins} <i class="fas fa-plus-circle" style="font-size:0.7rem;"></i></span><button class="nav-icon-btn" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
@@ -905,8 +954,8 @@
     <div class="footer"><i class="fas fa-handshake"></i> Swapify — Click any product for professional details</div>
     <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="text" id="prodCondition" placeholder="Condition" value="Like New"><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><input type="text" id="prodLocation" placeholder="Location" value="${userLocation?.city || 'Pakistan'}"><div class="upload-zone" onclick="document.getElementById('imageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Click to upload image</div><input type="file" id="imageFile" accept="image/*" style="display:none"><div id="imagePreviewDiv" class="preview-img"></div><input type="hidden" id="editIdHidden"><input type="hidden" id="imageBase64Hidden"><button type="submit" class="modal-btn">Publish</button></form></div></div>
     <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('redeemModal')">&times;</span><h3>Redeem Code</h3><input type="text" id="codeInput" placeholder="Enter secret code"><button id="redeemBtn" class="modal-btn">Redeem Now</button><p style="text-align:center; font-size:0.65rem; margin-top:0.8rem;">Codes: H646CVHDG6, SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
-    <div id="requestCoinsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('requestCoinsModal')">&times;</span><h3><i class="fas fa-hand-holding-heart"></i> Request Coins</h3><input type="number" id="reqAmount" placeholder="Amount of coins" min="10" step="10"><textarea id="reqReason" rows="3" placeholder="Why do you need coins? (e.g., want to buy an item, promotion, etc.)"></textarea><button id="submitRequestBtn" class="modal-btn">Submit Request via WhatsApp</button><p style="font-size:0.7rem; color:#666; margin-top:0.8rem;">Your request will be sent to admin on WhatsApp for review.</p></div></div>
-    <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>🪙 Coins:</span><span><strong>${currentUser.coins}</strong></span></div><div class="info-row"><span>Location:</span><span>${userLocation?.city || 'Pakistan'}</span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
+    <div id="requestCoinsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('requestCoinsModal')">&times;</span><h3>Request Coins</h3><input type="number" id="reqAmount" placeholder="Amount of coins" min="10" step="10"><textarea id="reqReason" rows="3" placeholder="Why do you need coins? (e.g., want to buy an item, promotion, etc.)"></textarea><button id="submitRequestBtn" class="modal-btn">Submit Request via WhatsApp</button><p style="font-size:0.7rem; color:#666; margin-top:0.8rem;">Your request will be sent to admin on WhatsApp for review.</p></div></div>
+    <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>Coins:</span><span><strong>${currentUser.coins}</strong></span></div><div class="info-row"><span>Location:</span><span>${userLocation?.city || 'Pakistan'}</span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
             
             attachEvents(products);
         }
@@ -917,7 +966,7 @@
             document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('swapify_user'); currentUser = null; renderLoginPage(); };
             document.getElementById('profileBtn').onclick = () => { document.getElementById('profileModalView').style.display = 'flex'; };
             document.getElementById('sellIconBtn').onclick = () => openSellModal();
-            document.getElementById('coinsIconBtn').onclick = () => { showToast(`💰 Balance: ${currentUser.coins} coins`, false); };
+            document.getElementById('coinsIconBtn').onclick = () => { showToast(`Balance: ${currentUser.coins} coins`, false); };
             document.getElementById('redeemIconBtn').onclick = () => { document.getElementById('redeemModal').style.display = 'flex'; };
             document.getElementById('requestCoinsBtn').onclick = () => { document.getElementById('requestCoinsModal').style.display = 'flex'; };
             document.getElementById('submitRequestBtn').onclick = () => {
@@ -970,16 +1019,37 @@
         window.closeModal = closeModal; window.openSellModal = openSellModal;
         
         async function renderLoginPage() {
-            document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:#ffffff; padding:1rem;"><div style="background:white; border-radius:48px; max-width:400px; width:90%; padding:1.8rem; box-shadow:0 20px 35px -15px rgba(0,0,0,0.08); border:1px solid #eef2f8;"><div style="text-align:center;"><i class="fas fa-handshake fa-3x" style="color:#2d2d2d;"></i><h1 style="margin:10px 0;">Swapify</h1><p style="color:#6c819a;">Pakistan's trusted swap marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#f1f5f9; color:#1a1a1a;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login →</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password (min 6)"><button id="doSignupBtn" class="modal-btn">Create Account (100 free coins)</button></div></div></div>`;
+            document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:#ffffff; padding:1rem;"><div style="background:white; border-radius:48px; max-width:400px; width:90%; padding:1.8rem; box-shadow:0 20px 35px -15px rgba(0,0,0,0.08); border:1px solid #eef2f8;"><div style="text-align:center;"><i class="fas fa-handshake fa-3x" style="color:#2d2d2d;"></i><h1 style="margin:10px 0;">Swapify</h1><p style="color:#6c819a;">Pakistan's trusted swap marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#f1f5f9; color:#1a1a1a;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password (min 6)"><button id="doSignupBtn" class="modal-btn">Create Account (100 free coins)</button></div></div></div>`;
             document.getElementById('showLoginTab').onclick = () => { document.getElementById('loginPanel').style.display='block'; document.getElementById('signupPanel').style.display='none'; };
             document.getElementById('showSignupTab').onclick = () => { document.getElementById('loginPanel').style.display='none'; document.getElementById('signupPanel').style.display='block'; };
-            document.getElementById('doLoginBtn').onclick = async () => { let res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } else showToast(res.message, true); };
-            document.getElementById('doSignupBtn').onclick = async () => { let res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } else showToast(res.message, true); };
+            document.getElementById('doLoginBtn').onclick = async () => { 
+                showSkeleton();
+                let res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); 
+                if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } 
+                else { showToast(res.message, true); removeSkeleton(); }
+            };
+            document.getElementById('doSignupBtn').onclick = async () => { 
+                showSkeleton();
+                let res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); 
+                if(res.success){ currentUser=res.user; await captureUserLocationOnce(); localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } 
+                else { showToast(res.message, true); removeSkeleton(); }
+            };
         }
         
         const savedUser = localStorage.getItem('swapify_user');
-        if(savedUser) { try { currentUser = JSON.parse(savedUser); (async()=>{ const storedLoc = localStorage.getItem(`swapify_loc_${currentUser.id}`); if(storedLoc){ userLocation=JSON.parse(storedLoc); locationCaptured=true; } else await captureUserLocationOnce(); renderHomePage(); })(); } catch(e){ renderLoginPage(); } } else renderLoginPage();
-        setTimeout(() => hideLoader(), 400);
+        if(savedUser) { 
+            try { 
+                currentUser = JSON.parse(savedUser); 
+                (async()=>{ 
+                    showSkeleton();
+                    const storedLoc = localStorage.getItem(`swapify_loc_${currentUser.id}`); 
+                    if(storedLoc){ userLocation=JSON.parse(storedLoc); locationCaptured=true; } 
+                    else await captureUserLocationOnce(); 
+                    await renderHomePage(); 
+                    hideLoader();
+                })(); 
+            } catch(e){ renderLoginPage(); hideLoader(); } 
+        } else { renderLoginPage(); hideLoader(); }
     })();
 </script>
 </body>
