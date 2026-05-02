@@ -3,239 +3,1079 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Swapify — Premium Peer Swap Marketplace</title>
+    <title>Swapify — Blue Premium Peer Swap Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    /* ============================================
+   SWAPIFY COMPLETE CSS - BLUE THEME
+   ============================================ */
 
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: #ffffff;
-            color: #1a1a1a;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-    
-        .container { max-width: 1400px; margin: 0 auto; padding: 0.1rem; }
-        .section-title {
-    font-size: clamp(1.4rem, 2vw, 2rem);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #ffffff;
+    color: #1e2a3a;
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+.global-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.global-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.spinner {
+    width: 52px;
+    height: 52px;
+    border: 3px solid #e0e7ff;
+    border-top: 3px solid #2563eb;
+    border-radius: 50%;
+    animation: spin 0.7s infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scalePop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0f172a;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+p {
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+/* BUTTONS */
+.btn-buy, .btn-swap, .detail-btn-buy, .detail-btn-swap, 
+.modal-btn, .header-search button, .add-review-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.btn-buy:hover, .btn-swap:hover, .detail-btn-buy:hover, 
+.detail-btn-swap:hover, .modal-btn:hover, .header-search button:hover,
+.add-review-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.btn-delete, .detail-btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+}
+
+.btn-delete:hover, .detail-btn-delete:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* NAVBAR */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+   
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem; /* remove top-bottom padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 2;
+    min-width: 200px;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.logo-image {
+    height: 94px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    display: block;
+}
+
+.brand-logo .fallback-text {
     font-weight: 800;
-    margin: 1.2rem 0 0.8rem 0;
-    padding-left: 0.4rem;
-    line-height: 1.3;
-    letter-spacing: 0.5px;
-    color: #1a1a1a;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: none;
+}
+
+.header-search {
+    background: #f8fafc;
+    border-radius: 60px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.2rem 0.2rem 1rem;
+    flex: 1;
+    transition: all 0.2s;
+}
+
+.header-search:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.header-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.2rem;
+    color: #1e293b;
+}
+
+.header-search input::placeholder {
+    color: #94a3b8;
+}
+
+.header-search button {
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.coin-badge-header {
+    padding: 0.4rem 1rem;
+    border-radius: 60px;
+    background: #eff6ff;
+    color: #1e293b;
+    font-weight: 800;
+    font-size: 0.8rem;
+    border: 1px solid #bfdbfe;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.coin-badge-header:hover {
+    background: #dbeafe;
+    transform: translateY(-2px);
+}
+
+.coin-badge-header i {
+    color: #2563eb;
+    animation: gentlePulse 2s infinite;
+}
+
+.nav-icon-btn {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #1e293b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-icon-btn:hover {
+    background: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ICON BAR */
+.icon-bar {
+    background: #ffffff;
+    border-radius: 70px;
+    margin: 0.6rem 0.8rem 1rem;
+    padding: 0.4rem 0.8rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-weight: 600;
+    font-size: 0.7rem;
+    color: #334155;
+    padding: 0.5rem 0.9rem;
+    border-radius: 50px;
+    transition: all 0.2s;
+}
+
+.icon-item:hover {
+    background: #eff6ff;
+    transform: translateY(-3px);
+}
+
+.icon-item i {
+    font-size: 1rem;
+    color: #2563eb;
+    transition: all 0.2s;
+}
+
+.icon-item:hover i {
+    transform: scale(1.2) rotate(5deg);
+    color: #1e40af;
+}
+
+/* HERO SLIDER */
+.hero-slider {
+    position: relative;
+    width: calc(100% - 2rem);
+    margin: 0.5rem auto 1.5rem;
+    border-radius: 22px;
+    overflow: hidden;
+    max-width: 1400px;
+    box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.1);
+    animation: fadeSlideUp 0.6s ease;
+}
+
+.slider-container {
+    position: relative;
+}
+
+.slider-images {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.slide-banner {
+    min-width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(37, 99, 235, 0.8);
+    color: white;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background: #2563eb;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-left { left: 16px; }
+.slider-right { right: 16px; }
+
+.slider-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dot.active {
+    opacity: 1;
+    width: 24px;
+    border-radius: 10px;
+    background: #2563eb;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.1rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 1rem 0 0.8rem;
+    padding-left: 12px;
+    color: #0f172a;
+    border-left: 4px solid #2563eb;
+    animation: fadeSlideUp 0.5s ease;
+}
+
+/* PRODUCTS GRID */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.product-card {
+    background: #ffffff;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #eef2ff;
+    transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    animation: scalePop 0.4s ease backwards;
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 25px 35px -12px rgba(37, 99, 235, 0.2);
+    border-color: #bfdbfe;
+}
+
+.product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: #f8fafc;
+    transition: transform 0.4s;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.03);
+}
+
+.product-info {
+    padding: 1rem;
+}
+
+.title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.coin-tag {
+    background: #dbeafe;
+    padding: 0.2rem 0.7rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+.product-desc {
+    font-size: 0.75rem;
+    color: #475569;
+    margin: 0.4rem 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.seller-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 0.7rem;
+    color: #475569;
+    border-top: 1px solid #eef2ff;
+    padding-top: 0.6rem;
+    margin-top: 0.4rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.btn-buy, .btn-swap, .btn-delete {
+    padding: 0.5rem 0;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    cursor: pointer;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* DETAIL PAGE */
+.product-detail-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    z-index: 1000;
+    overflow-y: auto;
+    animation: fadeSlideUp 0.3s ease;
+}
+
+.detail-header {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(12px);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eef2ff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.back-btn {
+    background: #eff6ff;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    background: #dbeafe;
+    transform: scale(1.05) rotate(-5deg);
+}
+
+.detail-grid {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.3rem;
+    padding: 0.9rem;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.gallery-slider {
+    position: relative;
+    background: #fafcff;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.main-gallery-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+    background: #f1f5f9;
+}
+
+.thumbnail-strip {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 16px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.thumbnail:hover {
+    transform: translateY(-3px) scale(1.05);
+    border-color: #2563eb;
+}
+
+.thumbnail.active-thumb {
+    border-color: #2563eb;
+    transform: scale(1.05);
+}
+
+.detail-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+}
+
+.detail-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: #eff6ff;
+    display: inline-block;
+    padding: 0.3rem 1.2rem;
+    border-radius: 60px;
+    color: #1e40af;
+}
+
+.detail-seller-card {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 24px;
+    margin: 1rem 0;
+    border: 1px solid #e0e7ff;
+}
+
+.detail-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.detail-btn {
+    flex: 1;
+    padding: 0.9rem;
+    border-radius: 60px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    border: none;
+}
+
+.reviews-section {
+    margin-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+}
+
+.review-card {
+    background: #f9fafb;
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid #eef2ff;
+}
+
+.review-stars {
+    color: #fbbf24;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+.review-text {
+    font-size: 0.85rem;
+    color: #334155;
+    margin: 6px 0;
+}
+
+.reviewer-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.add-review-btn {
+    background: #2563eb20;
+    border: 1px solid #bfdbfe;
+    padding: 0.5rem 1rem;
+    border-radius: 60px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #1e40af;
+}
+
+.star-rating {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.star-rating i {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #cbd5e1;
+}
+
+.star-rating i.fas.fa-star {
+    color: #fbbf24;
+}
+
+/* MODALS */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 32px;
+    max-width: 550px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 1.8rem;
+    position: relative;
+    box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.2);
+    animation: scalePop 0.3s ease;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.2s;
+}
+
+.close-modal:hover {
+    color: #ef4444;
+}
+
+.modal-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    margin: 0.6rem 0;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 60px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.9rem;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.modal-content textarea {
+    border-radius: 24px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.upload-group {
+    margin-bottom: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 0.8rem;
+    background: #fafcff;
+}
+
+.upload-label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #1e40af;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.upload-zone-single {
+    background: #f8fafc;
+    border: 1.5px dashed #bfdbfe;
+    border-radius: 60px;
+    padding: 0.6rem;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.upload-zone-single:hover {
+    background: #eff6ff;
+    border-color: #2563eb;
+}
+
+.preview-img-grid {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.preview-img-grid img {
+    width: 70px;
+    height: 70px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+.modal-btn {
+    width: 100%;
+    padding: 0.85rem;
+    margin-top: 0.8rem;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    background: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+}
+
+#loginPanel input, #signupPanel input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    margin: 0.6rem 0;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 60px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 60px;
+    z-index: 1300;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.8rem;
+    animation: fadeSlideUp 0.3s ease;
+    white-space: nowrap;
+    max-width: 90%;
+}
+
+/* PROFESSIONAL FOOTER */
+.footer {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    padding: 2rem 1rem 1.5rem;
+    margin-top: 3rem;
+    border-top: none;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.footer-section h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
     position: relative;
     display: inline-block;
 }
 
-.section-title::after {
-    content: "";
+.footer-section h4::after {
+    content: '';
     position: absolute;
-    left: 0.4rem;
     bottom: -6px;
-    width: 50px;
-    height: 3px;
-    border-radius: 10px;
-    background: linear-gradient(to right, #000, #444);
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: #2563eb;
+    border-radius: 2px;
 }
 
-        /* GLOBAL LOADER */
-        .global-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(12px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 20px;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .global-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-        .spinner {
-            width: 52px;
-            height: 52px;
-            border: 3px solid #e2e2e2;
-            border-top: 3px solid #2d2d2d;
-            border-radius: 50%;
-            animation: spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.footer-section p, .footer-section a {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+}
 
-        /* Skeleton Loading */
-        .skeleton-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 1rem;
-        }
-        .skeleton-card {
-            background: #fafafa;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid #ececec;
-            animation: pulse 1.2s ease-in-out infinite;
-        }
-        .skeleton-img { height: 180px; background: #eef2f5; }
-        .skeleton-text { height: 14px; background: #eef2f5; margin: 12px; border-radius: 8px; }
-        .skeleton-text.short { width: 60%; }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
+.footer-section a:hover {
+    color: #2563eb;
+}
 
-      /* ========== NAVBAR ========== */
-      .navbar {
-            background: #ffffff;
-            border-bottom: 1px solid #eef2f5;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-        }
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0.7rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex: 2;
-            min-width: 200px;
-        }
-        .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        .logo-img { height: 38px; width: auto; }
-        .logo-text {
-            font-weight: 800;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, #2c2c2c, #1e1e1e);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .header-search {
-            background: #ffffff;
-            border-radius: 60px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.2rem 0.2rem 0.2rem 1rem;
-            width: 100%;
-            flex: 1;
-        }
-        .header-search input {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 0.85rem;
-            padding: 0.5rem 0.2rem;
-        }
-        .header-search input::placeholder { color: #9aa9b9; }
-        .header-search button {
-            background: #2c2c2c;
-            border: none;
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: 0.2s;
-        }
-        .header-search button:hover { background: #1f1f1f; transform: scale(0.96); }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
-        .coin-badge-header {
-            padding: 0.4rem 1rem;
-            border-radius: 60px;
-            background: #f7f9fc;
-            color: #2d2d2d;
-            font-weight: 800;
-            font-size: 0.8rem;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .coin-badge-header:hover { background: #eef2ff; transform: translateY(-1px); }
-        .nav-icon-btn {
-            background: #f7f9fc;
-            border: 1px solid #e2e8f0;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: #1f1f1f;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .nav-icon-btn:hover { background: #2c2c2c; color: white; transform: translateY(-2px); }
-        @media (max-width: 550px) {
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.footer-social a:hover {
+    background: #2563eb;
+    transform: translateY(-3px);
+}
+
+.footer-social a i {
+    font-size: 1rem;
+    color: white;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .logo-image { height: 36px; max-width: 140px; }
+    .slide-banner { height: 200px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .product-image { height: 150px; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .main-gallery-img { height: 260px; }
+    .thumbnail { width: 55px; height: 55px; }
+    .detail-title { font-size: 1.4rem; }
+    .footer-container { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
+    .footer-section h4::after { left: 50%; transform: translateX(-50%); }
+    .footer-social { justify-content: center; }
+}
+
+@media (max-width: 550px) {
+    .nav-container {
+        padding: 0 1rem;
+        margin-top: -4px; /* reduces extra header height */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        
+    }
+
+    .logo-area {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.2rem;
+        margin-top: -25px;
+    }
+
+    .logo-image {
+        height: 100px; /* bigger logo without stretching navbar */
+        width: auto;
+        max-width: 160px;
+        object-fit: contain;
+        align-items: center;
+        display: block;
+    }
+
+    .header-search {
+        width: 100%;
+        margin-top: -4px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .header-actions {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: -2px;
+    }
+}
+@media (max-width: 550px) {
             .nav-container {
                 padding: 0.6rem 0.8rem;
                 gap: 0.6rem;
             }
             .logo-area {
-                width: 100%;
-                gap: 0.6rem;
-                flex-wrap: wrap;
-            }
-            .brand-logo {
-                flex-shrink: 0;
-            }
-            .logo-text {
-                font-size: 1rem;
-            }
-            .logo-img {
-                height: 32px;
-            }
-            .header-search {
-                width: 100%;
-                flex: auto;
-                padding: 0.15rem 0.15rem 0.15rem 0.8rem;
-            }
+    width: 100%;
+    display: flex;
+    align-items: center;      /* vertical center */
+    justify-content: center;  /* horizontal center */
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+.logo-text {
+    font-size: 1rem;
+}
+
+.logo-img {
+    height: 42px; /* better visible size */
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.header-search {
+    width: 100%;
+    flex: auto;
+    margin-top: -28px; /* adjusted top spacing */
+    padding: 0.15rem 0.15rem 0.15rem 0.8rem;
+}
             .header-search input {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.1rem;
@@ -266,9 +1106,6 @@
                 padding: 0.2rem 0.4rem;
                 font-size: 0.45rem;
             }
-            .icon-item i {
-                font-size: 0.45rem;
-            }
         }
 
         @media (max-width: 380px) {
@@ -285,444 +1122,10 @@
                 font-size: 0.6rem;
             }
         }
-       /* Icon Bar */
-       .icon-bar {
-    background: #ffffff;
-    border-radius: 70px;
-    margin: 0.6rem 0.8rem 1rem 0.8rem;
-    padding: 0.6rem 1rem; /* increased inner space */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem; /* bigger gap between icons */
-}
-
-.icon-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px; /* space between icon and text */
-    cursor: pointer;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    background: transparent;
-    border: none;
-    font-weight: 600;
-    font-size: 0.7rem;
-    color: #2d2d2d;
-    padding: 0.7rem 1rem; /* more clickable space */
-    min-width: 63px; /* fixed spacing consistency */
-}
-.icon-item i {
-    font-size: 1rem;
-    color: #2c2c2c;
-    transition: 0.3s;
-}
-
-.icon-item:hover {
-    background: #f1f5f9;
-    transform: translateY(-3px);
-}
-
-#sellIconBtn {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-}       /* Hero Banner */
-        .hero-banner {
-            position: relative;
-            width: calc(100% - 2rem);
-            margin: 0.5rem auto 1.5rem auto;
-            border-radius: 17px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            cursor: pointer;
-            max-width: 1400px;
-        }
-        .banner-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            opacity: 0.8;
-            transition: transform 0.4s ease;
-        }
-        .hero-banner:hover .banner-image {
-            transform: scale(1.02);
-        }
-        .banner-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
-            color: white;
-            padding: 1.5rem;
-        }
-        .banner-overlay h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-        .banner-overlay p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        @media (max-width: 768px) {
-            .banner-image { height: 150px; }
-            .banner-overlay h2 { font-size: 1.2rem; }
-            .banner-overlay p { font-size: 0.7rem; }
-        }
-
-        /* Products Grid */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin: 0.5rem 0 0.8rem 0;
-            padding-left: 0.2rem;
-        }
-        /* Products Grid */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0.1rem; }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 5px;
-            margin-top: 0.5rem;
-        }
-        .product-card {
-            background: #ffffff;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #eceff4;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -12px rgba(0,0,0,0.12); border-color: #e2e8f0; }
-        .product-image { width: 100%; height: 250px; object-fit: cover; background: #f8fafc; }
-        .product-info { padding: 1rem; }
-        .title-bar { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.5rem; }
-        .product-title { font-size: 1rem; font-weight: 800; color: #1e1e1e; }
-        .coin-tag { background: #f1f5f9; padding: 0.2rem 0.7rem; border-radius: 30px; font-size: 0.7rem; font-weight: 700; color: #2d2d2d; }
-        .product-desc { font-size: 0.75rem; color: #5a6e85; margin: 0.4rem 0; line-height: 1.4; }
-        .seller-row { display: flex; gap: 6px; align-items: center; font-size: 0.7rem; color: #5f7f9e; margin: 0.5rem 0; border-top: 1px solid #eef2f8; padding-top: 0.5rem; }
-        .action-buttons { display: flex; gap: 8px; margin-top: 0.6rem; flex-wrap: wrap; }
-        .btn-buy, .btn-swap, .btn-edit, .btn-delete {
-            padding: 0.5rem 0;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.7rem;
-            cursor: pointer;
-            flex: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s ease;
-            background: #2d2d2d;
-            color: white;
-        }
-        .btn-buy:hover, .btn-swap:hover, .btn-edit:hover, .btn-delete:hover { background: #1a1a1a; transform: translateY(-2px); }
-
-        /* Detail Page */
-        .product-detail-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            z-index: 1000;
-            overflow-y: auto;
-            animation: fadeIn 0.25s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .detail-header {
-            position: sticky;
-            top: 0;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(12px);
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #eef2f8;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            z-index: 10;
-        }
-        .back-btn {
-            background: #f1f5f9;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: 0.2s;
-        }
-        .back-btn:hover { background: #e2e8f0; }
-        .detail-grid {
-            max-width: 1100px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-            padding: 2rem;
-            margin: 0 auto;
-        }
-        .detail-main-img {
-            width: 100%;
-            max-height: 400px;
-            border-radius: 10px;
-            object-fit: cover;
-            background: #f8fafc;
-        }
-        .detail-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .detail-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: #f1f5f9;
-            display: inline-block;
-            padding: 0.3rem 1.2rem;
-            border-radius: 60px;
-        }
-        .detail-seller-card {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 20px;
-            margin: 1rem 0;
-        }
-        .detail-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .detail-btn {
-            flex: 1;
-            padding: 0.9rem;
-            border-radius: 60px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .detail-btn-buy { background: #2d2d2d; color: white; }
-        .detail-btn-swap { background: #25D366; color: white; }
-        .detail-btn-edit { background: #3b82f6; color: white; }
-        .detail-btn-delete { background: #dc2626; color: white; }
-        @media (max-width: 768px) {
-            .detail-grid { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
-            .detail-title { font-size: 1.4rem; }
-            .detail-price { font-size: 1.2rem; }
-        }
-
-        /* MODAL - FIXED, NO TRANSITION ISSUES */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1100;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 28px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 1.8rem;
-            position: relative;
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
-            animation: modalFadeIn 0.2s ease-out;
-        }
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        .modal-content h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1.2rem;
-            text-align: center;
-            color: #1a1a1a;
-        }
-        .modal-content input,
-        .modal-content textarea,
-        .modal-content select {
-            width: 100%;
-            padding: 0.85rem 1rem;
-            margin: 0.6rem 0;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 60px;
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 0.9rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #ffffff;
-        }
-        .modal-content input:focus,
-        .modal-content textarea:focus,
-        .modal-content select:focus {
-            outline: none;
-            border-color: #2d2d2d;
-            box-shadow: 0 0 0 3px rgba(45, 45, 45, 0.08);
-        }
-        .modal-content textarea {
-            border-radius: 24px;
-            resize: vertical;
-            min-height: 80px;
-        }
-        .upload-zone {
-            background: #fafcff;
-            border: 1.5px dashed #cbd5e1;
-            border-radius: 60px;
-            padding: 0.9rem;
-            margin: 0.5rem 0;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .upload-zone:hover {
-            background: #f1f5f9;
-            border-color: #2d2d2d;
-        }
-        .preview-img {
-            margin-top: 8px;
-            text-align: center;
-        }
-        .preview-img img {
-            max-width: 100%;
-            max-height: 100px;
-            border-radius: 16px;
-            object-fit: cover;
-        }
-        .modal-btn {
-            width: 100%;
-            padding: 0.85rem;
-            margin-top: 1rem;
-            border: none;
-            border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            background: #2d2d2d;
-            color: white;
-            transition: all 0.2s;
-        }
-        .modal-btn:hover {
-            background: #1a1a1a;
-            transform: translateY(-2px);
-        }
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1.2rem;
-            font-size: 1.6rem;
-            cursor: pointer;
-            color: #94a3b8;
-            transition: color 0.2s;
-            line-height: 1;
-        }
-        .close-modal:hover {
-            color: #dc2626;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e2a3a;
-            color: white;
-            padding: 0.7rem 1.3rem;
-            border-radius: 60px;
-            z-index: 1300;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            font-size: 0.8rem;
-            animation: slideUp 0.25s ease;
-            max-width: 90%;
-            text-align: center;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
-        }
-        @keyframes slideUp {
-            from { transform: translateX(-50%) translateY(20px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-        
-        .profile-avatar {
-            width: 60px;
-            height: 60px;
-            background: #f1f5f9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.8rem;
-        }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-            background: #f8fafc;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        .footer {
-            background: #f8fafc;
-            text-align: center;
-            padding: 1.2rem;
-            margin-top: 2rem;
-            font-size: 0.75rem;
-            color: #4a5b6e;
-            border-top: 1px solid #eef2f8;
-        }
-        
-        #loginPanel input, #signupPanel input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            margin: 0.5rem 0;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 40px;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 550px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; }
-            .product-image { height: 130px; }
-            .product-title { font-size: 0.8rem; }
-            .section-title { font-size: 1.2rem; }
-            .modal-content { padding: 1.5rem; border-radius: 24px; }
-            .modal-content h3 { font-size: 1.2rem; }
-        }
-    </style>
+</style>
 </head>
 <body>
 <div id="root"></div>
-
 <script>
     (function() {
         const SUPABASE_URL = "https://rnspqdxonmqluaslxyat.supabase.co";
@@ -731,332 +1134,194 @@
         
         let currentUser = null;
         let cachedProducts = [];
-        let productsCache = null;
-        let productsCacheTime = 0;
-        const CACHE_DURATION = 3 * 60 * 1000;
-
+        let currentSearch = '';
+        
         function showToast(msg, isErr = false) { 
-            let div = document.createElement('div'); 
-            div.className = 'toast'; 
-            div.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(msg)}`; 
-            div.style.background = isErr ? '#dc2626' : '#1f2a3e'; 
-            document.body.appendChild(div); 
-            setTimeout(() => div.remove(), 3000);
+            let div = document.createElement('div'); div.className = 'toast'; div.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(msg)}`; 
+            div.style.background = isErr ? '#dc2626' : '#1e293b'; document.body.appendChild(div); setTimeout(() => div.remove(), 2800);
         }
-        
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
-        function truncateDescription(desc, limit = 30) { if (!desc) return ''; return desc.length <= limit ? desc : desc.substring(0, limit) + '...'; }
         function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
-        
-        function isValidPakistanPhone(phone) { 
-            const cleaned = phone.trim();
-            return /^\+92[0-9]{10}$/.test(cleaned) || /^03[0-9]{9}$/.test(cleaned);
+        function truncateText(text, maxLength = 60) {
+            if (!text) return '';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
         }
-        
-        function formatPhoneForStorage(phone) {
-            let cleaned = phone.trim();
-            if (cleaned.startsWith('03') && cleaned.length === 11) {
-                cleaned = '+92' + cleaned.substring(1);
-            }
-            return cleaned;
-        }
-        
-        async function imageToBase64(file) {
-            return new Promise((resolve, reject) => {
-                if (file.size > 1.5 * 1024 * 1024) {
-                    reject("Image too large (max 1.5MB)");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-            });
-        }
-        
-        function showLoader() {
-            let loader = document.getElementById('globalLoader');
-            if (!loader) {
-                loader = document.createElement('div');
-                loader.id = 'globalLoader';
-                loader.className = 'global-loader';
-                loader.innerHTML = `<div class="spinner"></div><div>Loading Swapify...</div>`;
-                document.body.appendChild(loader);
-            }
-            loader.classList.remove('hidden');
-        }
-        function hideLoader() { document.getElementById('globalLoader')?.classList.add('hidden'); }
+        async function imageToBase64(file) { return new Promise((resolve, reject) => { if (file.size > 1.5 * 1024 * 1024) reject("Image max 1.5MB"); const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => resolve(reader.result); reader.onerror = reject; }); }
         
         async function loadProducts(search = '') {
-            const now = Date.now();
-            if (productsCache && (now - productsCacheTime) < CACHE_DURATION && !search) {
-                cachedProducts = productsCache;
-                return cachedProducts;
-            }
             try {
                 let query = supabase.from('products').select('*').eq('status', 'available');
                 if (search) query = query.ilike('product_name', `%${search}%`);
                 const { data, error } = await query.order('created_at', { ascending: false });
-                if (error) { console.error(error); showToast("Error loading products", true); return []; }
+                if (error) return [];
                 cachedProducts = data || [];
-                if (!search) { productsCache = cachedProducts; productsCacheTime = now; }
                 return cachedProducts;
-            } catch(e) { showToast("Network error", true); return []; }
+            } catch(e) { return []; }
         }
         
-        async function addProduct(product) {
+        async function addProduct(product, mainImageBase64, extraImagesBase64) {
             try {
                 const newProduct = {
-                    id: generateId(),
-                    product_name: product.productName.trim(),
-                    description: product.description || '',
-                    condition: 'Like New',
-                    price_coins: parseInt(product.priceCoins),
-                    location: product.location || 'Pakistan',
-                    image_url: product.imageUrl || '',
-                    seller_id: currentUser.id,
-                    seller_name: currentUser.name,
-                    created_at: new Date().toISOString(),
-                    status: 'available'
+                    id: generateId(), product_name: product.productName.trim(), description: product.description || '', condition: 'Like New',
+                    price_coins: parseInt(product.priceCoins), location: product.location || 'Pakistan', image_url: mainImageBase64 || '',
+                    extra_images: extraImagesBase64.slice(0,3), seller_id: currentUser.id, seller_name: currentUser.name,
+                    created_at: new Date().toISOString(), status: 'available', reviews: []
                 };
                 const { error } = await supabase.from('products').insert([newProduct]);
-                if (error) { showToast("Failed: " + error.message, true); return false; }
-                productsCache = null;
-                showToast("✅ Item listed successfully!", false);
+                if (error) { showToast("Failed: "+error.message, true); return false; }
+                showToast("✅ Item listed!", false);
                 return true;
-            } catch(e) { showToast("Error adding product", true); return false; }
+            } catch(e) { showToast("Error", true); return false; }
         }
         
         async function deleteProduct(productId) {
-            try {
-                const { error } = await supabase.from('products').delete().eq('id', productId).eq('seller_id', currentUser.id);
-                if (error) return false;
-                productsCache = null;
-                showToast("🗑️ Item removed", false);
-                return true;
-            } catch(e) { return false; }
+            const { error } = await supabase.from('products').delete().eq('id', productId).eq('seller_id', currentUser.id);
+            if (error) return false;
+            showToast("🗑️ Removed", false); return true;
+        }
+        
+        async function addReview(productId, rating, comment) {
+            const { data: prod } = await supabase.from('products').select('reviews').eq('id', productId).single();
+            let reviews = prod?.reviews || [];
+            reviews.push({ reviewer: currentUser.name, rating, comment, date: new Date().toISOString() });
+            const { error } = await supabase.from('products').update({ reviews }).eq('id', productId);
+            if (error) { showToast("Review error", true); return false; }
+            showToast("⭐ Review added! +5 coins", false);
+            const { data: u } = await supabase.from('users').select('coins').eq('id', currentUser.id).single();
+            await supabase.from('users').update({ coins: u.coins + 5 }).eq('id', currentUser.id);
+            currentUser.coins = u.coins + 5;
+            localStorage.setItem('swapify_user', JSON.stringify(currentUser));
+            return true;
+        }
+        
+        async function sendCoinRequest(amount, reason) {
+            const adminWhatsApp = "+923361871497";
+            const message = `💰 COIN REQUEST\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nRequested Amount: ${amount} coins\nReason: ${reason}\nCurrent Balance: ${currentUser.coins}`;
+            window.open(`https://wa.me/${adminWhatsApp.replace('+','')}?text=${encodeURIComponent(message)}`, '_blank');
+            showToast(`Request sent to admin!`, false);
+            return true;
         }
         
         async function loginUser(email, password) {
             const { data, error } = await supabase.from('users').select('*').eq('email', email).eq('password', password);
-            if (error || !data || data.length === 0) return { success: false, message: "Invalid email or password" };
+            if (error || !data || data.length === 0) return { success: false };
             return { success: true, user: data[0] };
         }
-        
         async function registerUser(name, email, phone, password) {
-            const formattedPhone = formatPhoneForStorage(phone);
-            if (!isValidPakistanPhone(phone)) { 
-                return { success: false, message: "WhatsApp must start with +92 or 03 (Pakistan number)" }; 
-            }
+            const formattedPhone = phone.trim().startsWith('+') ? phone.trim() : (phone.trim().startsWith('03') ? '+92'+phone.trim().substring(1) : phone);
             const { data: existing } = await supabase.from('users').select('email').eq('email', email);
-            if (existing && existing.length) { return { success: false, message: "Email already registered" }; }
-            
-            const newUser = {
-                id: generateId(),
-                name: name.trim(),
-                email: email.trim().toLowerCase(),
-                phone: formattedPhone,
-                password: password,
-                coins: 100,
-                created_at: new Date().toISOString(),
-                used_codes: {}
-            };
+            if (existing?.length) return { success: false, message: "Email exists" };
+            const newUser = { id: generateId(), name: name.trim(), email: email.trim().toLowerCase(), phone: formattedPhone, password, coins: 100, created_at: new Date().toISOString(), used_codes: {} };
             const { error } = await supabase.from('users').insert([newUser]);
             if (error) return { success: false, message: error.message };
             return { success: true, user: newUser };
         }
-        
-        async function redeemCode(code) {
-            const validCodes = { 'SWAPIFY100': 100, 'WELCOME50': 50, 'GOLD200': 200, 'TRADEPK': 150 };
-            const upper = code.toUpperCase();
-            if (!validCodes[upper]) { showToast("Invalid code", true); return false; }
-            const { data: u } = await supabase.from('users').select('*').eq('id', currentUser.id).single();
-            const used = u.used_codes || {};
-            if (used[upper]) { showToast("Already redeemed", true); return false; }
-            const newCoins = u.coins + validCodes[upper];
-            used[upper] = new Date();
-            const { error } = await supabase.from('users').update({ coins: newCoins, used_codes: used }).eq('id', currentUser.id);
-            if (error) return false;
-            currentUser.coins = newCoins;
-            localStorage.setItem('swapify_user', JSON.stringify(currentUser));
-            showToast(`+${validCodes[upper]} coins! Balance: ${newCoins}`, false);
-            return true;
-        }
-        
-        async function purchaseRedirect(sellerId, productName, price, sellerName) {
-            if (currentUser.coins < price) { showToast(`Insufficient coins! Need ${price} coins`, true); return; }
-            if (currentUser.id === sellerId) { showToast("Cannot buy your own item", true); return; }
-            const { data: sellerInfo } = await supabase.from('users').select('phone').eq('id', sellerId).single();
-            if (!sellerInfo?.phone) { showToast("Seller contact unavailable", true); return; }
-            const message = `BUY REQUEST: "${productName}" for ${price} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}`;
-            window.open(`https://wa.me/${sellerInfo.phone.replace('+', '')}?text=${encodeURIComponent(message)}`, '_blank');
-            showToast(`Inquiry sent to ${sellerName}`, false);
-        }
+        async function redeemCode(code) { const valid = { 'SWAPIFY100':100, 'WELCOME50':50, 'GOLD200':200, 'TRADEPK':150 }; const upper=code.toUpperCase(); if(!valid[upper]){ showToast("Invalid",true); return false; } const {data:u}=await supabase.from('users').select('*').eq('id', currentUser.id).single(); if(u.used_codes?.[upper]){ showToast("Used",true); return false; } const newCoins=u.coins+valid[upper]; u.used_codes=u.used_codes||{}; u.used_codes[upper]=new Date(); const {error}=await supabase.from('users').update({coins:newCoins, used_codes:u.used_codes}).eq('id',currentUser.id); if(error) return false; currentUser.coins=newCoins; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); showToast(`+${valid[upper]} coins!`,false); return true; }
+        async function purchaseRedirect(sellerId, productName, price, sellerName){ if(currentUser.coins<price){ showToast(`Need ${price} coins`,true); return; } const {data:sellerInfo}=await supabase.from('users').select('phone').eq('id',sellerId).single(); if(!sellerInfo?.phone){ showToast("No contact",true); return; } const msg=`BUY: "${productName}" for ${price} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}`; window.open(`https://wa.me/${sellerInfo.phone.replace('+','')}?text=${encodeURIComponent(msg)}`,'_blank'); showToast(`Inquiry sent`,false); }
         
         function showProductDetail(product) {
             const isOwner = currentUser.id === product.seller_id;
-            const imgSrc = product.image_url || 'https://placehold.co/600x400/f8fafc/8ba0bc?text=Swap+Item';
-            const detailHTML = `
-                <div class="product-detail-page" id="productDetailPage">
-                    <div class="detail-header">
-                        <button class="back-btn" id="closeDetailBtn"><i class="fas fa-arrow-left"></i></button>
-                        <h3>Product Details</h3>
-                    </div>
-                    <div class="detail-grid">
-                        <img class="detail-main-img" src="${escapeHtml(imgSrc)}" onerror="this.src='https://placehold.co/600x400/f8fafc/8ba0bc?text=Image'">
-                        <div>
-                            <h1 class="detail-title">${escapeHtml(product.product_name)}</h1>
-                            <div class="detail-price">${product.price_coins} Coins</div>
-                            <p style="margin:1rem 0; color:#5a6e85;">${escapeHtml(product.description || 'No description')}</p>
-                            <div class="detail-seller-card">
-                                <p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p>
-                                <p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.location)}</p>
-                            </div>
-                            ${!isOwner ? `
-                                <div class="detail-buttons">
-                                    <button class="detail-btn detail-btn-buy" id="detailBuyBtn">Buy Now</button>
-                                    <button class="detail-btn detail-btn-swap" id="detailSwapBtn">Swap on WhatsApp</button>
-                                </div>
-                            ` : `
-                                <div class="detail-buttons">
-                                    <button class="detail-btn detail-btn-delete" id="detailDeleteBtn">Delete Item</button>
-                                </div>
-                            `}
-                        </div>
-                    </div>
-                </div>
-            `;
+            const mainImg = product.image_url || 'https://placehold.co/800x500/f8fafc/2563eb?text=Swap+Item';
+            const extraImgs = product.extra_images || [];
+            let allImages = [mainImg, ...extraImgs];
+            while(allImages.length < 3) allImages.push('https://placehold.co/800x500/eef2ff/2563eb?text=Item');
+            const reviews = product.reviews || [];
+            let reviewsHtml = `<div class="reviews-section"><h4><i class="fas fa-star" style="color:#fbbf24;"></i> Reviews (${reviews.length})</h4>`;
+            if(reviews.length===0) reviewsHtml += `<p>No reviews yet. Be first! (+5 coins)</p>`;
+            else reviews.forEach(rev => { reviewsHtml += `<div class="review-card"><div class="review-stars">${'★'.repeat(rev.rating)}${'☆'.repeat(5-rev.rating)}</div><div class="review-text">${escapeHtml(rev.comment)}</div><div class="reviewer-name">— ${escapeHtml(rev.reviewer)}</div></div>`; });
+            reviewsHtml += `</div>${!isOwner ? `<button class="add-review-btn" id="openReviewModalBtn"><i class="fas fa-star"></i> Write Review (+5 coins)</button>` : ''}`;
+            let thumbnailsHtml = `<div class="thumbnail-strip">${allImages.map((img, idx) => `<img class="thumbnail ${idx===0?'active-thumb':''}" data-img="${escapeHtml(img)}" src="${escapeHtml(img)}">`).join('')}</div>`;
+            const detailHTML = `<div class="product-detail-page" id="productDetailPage"><div class="detail-header"><button class="back-btn" id="closeDetailBtn"><i class="fas fa-arrow-left"></i></button><h3>Product Details</h3></div><div class="detail-grid"><div class="gallery-slider"><img id="galleryMain" class="main-gallery-img" src="${escapeHtml(allImages[0])}">${thumbnailsHtml}</div><div><h1 class="detail-title">${escapeHtml(product.product_name)}</h1><div class="detail-price">${product.price_coins} Coins</div><p style="margin:1rem 0; line-height:1.6;">${escapeHtml(product.description || 'No description provided.')}</p><div class="detail-seller-card"><p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p><p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.location)}</p></div>${!isOwner ? `<div class="detail-buttons"><button class="detail-btn detail-btn-buy" id="detailBuyBtn"><i class="fas fa-shopping-cart"></i> Buy Now</button><button class="detail-btn detail-btn-swap" id="detailSwapBtn"><i class="fab fa-whatsapp"></i> Swap</button></div>` : `<div class="detail-buttons"><button class="detail-btn detail-btn-delete" id="detailDeleteBtn"><i class="fas fa-trash"></i> Delete</button></div>`}${reviewsHtml}</div></div></div>`;
             document.body.insertAdjacentHTML('beforeend', detailHTML);
+            const mainImgEl = document.getElementById('galleryMain');
+            document.querySelectorAll('.thumbnail').forEach(thumb => { thumb.onclick = () => { mainImgEl.src = thumb.dataset.img; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active-thumb')); thumb.classList.add('active-thumb'); }; });
             document.getElementById('closeDetailBtn').onclick = () => document.getElementById('productDetailPage')?.remove();
-            if (!isOwner) {
-                document.getElementById('detailBuyBtn').onclick = () => {
-                    document.getElementById('productDetailPage')?.remove();
-                    purchaseRedirect(product.seller_id, product.product_name, product.price_coins, product.seller_name);
-                };
-                document.getElementById('detailSwapBtn').onclick = () => {
-                    document.getElementById('productDetailPage')?.remove();
-                    showToast(`Swap request sent`, false);
-                    window.open(`https://wa.me/?text=Swap%20request%20${encodeURIComponent(product.product_name)}`, '_blank');
-                };
-            } else {
-                document.getElementById('detailDeleteBtn').onclick = async () => {
-                    if(confirm("Delete this item?")) {
-                        document.getElementById('productDetailPage')?.remove();
-                        if(await deleteProduct(product.id)) renderHomePage(currentSearch);
-                    }
-                };
-            }
+            if(!isOwner){
+                document.getElementById('detailBuyBtn').onclick = () => { document.getElementById('productDetailPage')?.remove(); purchaseRedirect(product.seller_id,product.product_name,product.price_coins,product.seller_name); };
+                document.getElementById('detailSwapBtn').onclick = () => { window.open(`https://wa.me/?text=Swap%20${encodeURIComponent(product.product_name)}`,'_blank'); showToast(`Swap initiated`,false); };
+                const reviewBtn = document.getElementById('openReviewModalBtn');
+                if(reviewBtn) reviewBtn.onclick = () => openReviewModal(product.id);
+            } else { document.getElementById('detailDeleteBtn').onclick = async () => { if(confirm("Delete?")) { if(await deleteProduct(product.id)){ document.getElementById('productDetailPage')?.remove(); renderHomePage(currentSearch); } } }; }
         }
         
-        let currentSearch = '';
+        function openReviewModal(productId) {
+            let modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.style.display = 'flex';
+            modalDiv.innerHTML = `<div class="modal-content"><span class="close-modal" onclick="this.closest('.modal').remove()">&times;</span><h3>Rate Product</h3><div class="star-rating" id="starRatingWidget"><i class="far fa-star" data-r="1"></i><i class="far fa-star" data-r="2"></i><i class="far fa-star" data-r="3"></i><i class="far fa-star" data-r="4"></i><i class="far fa-star" data-r="5"></i></div><textarea id="reviewComment" rows="3" placeholder="Share your experience..."></textarea><button id="submitReviewBtn" class="modal-btn">Submit</button></div>`;
+            document.body.appendChild(modalDiv);
+            let ratingValue = 0;
+            const stars = modalDiv.querySelectorAll('.star-rating i');
+            stars.forEach(star => { star.onclick = () => { ratingValue = parseInt(star.dataset.r); stars.forEach(s=>{ if(parseInt(s.dataset.r) <= ratingValue) s.className = 'fas fa-star'; else s.className = 'far fa-star'; }); }; });
+            modalDiv.querySelector('#submitReviewBtn').onclick = async () => { if(ratingValue===0){ showToast("Select rating",true); return; } const comment = modalDiv.querySelector('#reviewComment').value; if(await addReview(productId, ratingValue, comment)) modalDiv.remove(); };
+            modalDiv.querySelector('.close-modal').onclick = () => modalDiv.remove();
+        }
+        
+        function openRequestCoinsModal() {
+            let modalDiv = document.createElement('div'); modalDiv.className = 'modal'; modalDiv.style.display = 'flex';
+            modalDiv.innerHTML = `<div class="modal-content"><span class="close-modal" onclick="this.closest('.modal').remove()">&times;</span><h3><i class="fas fa-coins" style="color:#2563eb;"></i> Request Coins</h3><input type="number" id="reqAmount" placeholder="Amount (min 10)" min="10"><textarea id="reqReason" rows="3" placeholder="Reason for coin request..."></textarea><button id="submitRequestBtn" class="modal-btn">Send Request via WhatsApp</button><p style="text-align:center; font-size:0.7rem; margin-top:0.8rem; color:#64748b;">Admin will review and add coins</p></div>`;
+            document.body.appendChild(modalDiv);
+            modalDiv.querySelector('#submitRequestBtn').onclick = async () => {
+                const amount = document.getElementById('reqAmount').value;
+                const reason = document.getElementById('reqReason').value;
+                if(!amount || amount < 10){ showToast("Enter valid amount (min 10)", true); return; }
+                await sendCoinRequest(amount, reason);
+                modalDiv.remove();
+            };
+            modalDiv.querySelector('.close-modal').onclick = () => modalDiv.remove();
+        }
+        
         async function renderHomePage(searchTerm = '') {
             currentSearch = searchTerm;
             const products = await loadProducts(searchTerm);
-            
-            const productsHTML = products.map(p => `
-                <div class="product-card" data-product-id="${p.id}">
-                    <img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/600x400/f8fafc/8ba0bc?text=Swapify+Item')}" onerror="this.src='https://placehold.co/600x400/f8fafc/8ba0bc?text=Image'">
-                    <div class="product-info">
-                        <div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins} Coins</span></div>
-                        <div class="product-desc">${escapeHtml(truncateDescription(p.description, 35))}</div>
-                        <div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div>
-                        <div class="action-buttons" onclick="event.stopPropagation()">
-                            ${currentUser.id !== p.seller_id ? `
-                                <button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Buy</button>
-                                <button class="btn-swap" data-sid="${p.seller_id}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Swap</button>
-                            ` : `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
+            const productsHTML = products.map(p => `<div class="product-card" data-product-id="${p.id}"><img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/400x200/f8fafc/2563eb?text=Item')}"><div class="product-info"><div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins}</span></div><div class="product-desc">${escapeHtml(truncateText(p.description || '', 60))}</div><div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div><div class="action-buttons" onclick="event.stopPropagation()">${currentUser.id !== p.seller_id ? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}">Swap</button>` : `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}</div></div></div>`).join('');
+            const sliderBanners = ['https://images.pexels.com/photos/4450334/pexels-photo-4450334.jpeg?auto=compress&w=1200', 'https://images.pexels.com/photos/909907/pexels-photo-909907.jpeg?auto=compress&w=1200', 'https://images.pexels.com/photos/5632381/pexels-photo-5632381.jpeg?auto=compress&w=1200'];
             document.getElementById('root').innerHTML = `
-                <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img src="https://img.icons8.com/ios-filled/100/2d2d2d/swap.png" alt="Swapify" style="width:34px; height:34px;"><span class="logo-text">Swapify</span></div><div class="header-search"><i class="fas fa-search"></i><input type="text" id="headerSearchInput" placeholder="Search phones, bikes..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><i class="fas fa-coins"></i> ${currentUser.coins} <i class="fas fa-plus-circle"></i></span><button class="nav-icon-btn" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
+                <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img class="logo-image" src="logo.png" alt="Swapify Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="fallback-text" style="display:none;">Swapify</span></div><div class="header-search"><i class="fas fa-search" style="color:#2563eb;"></i><input type="text" id="headerSearchInput" placeholder="Search items..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><i class="fas fa-coins"></i> ${currentUser.coins} <i class="fas fa-plus-circle"></i></span><button class="nav-icon-btn" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
                 <div class="icon-bar"><button class="icon-item" id="sellIconBtn"><i class="fas fa-plus-circle"></i><span>Sell</span></button><button class="icon-item" id="coinsIconBtn"><i class="fas fa-coins"></i><span>Coins</span></button><button class="icon-item" id="redeemIconBtn"><i class="fas fa-ticket-alt"></i><span>Redeem</span></button></div>
-                <div class="hero-banner"><img class="banner-image" src="https://images.pexels.com/photos/5632381/pexels-photo-5632381.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Swapify Banner"><div class="banner-overlay"><h2>Swap • Sell • Save</h2><p>Pakistan's trusted peer marketplace</p></div></div>
-                <div class="container"><h2 class="section-title">New Products </h2><div class="products-grid">${products.length ? productsHTML : '<div style="text-align:center; padding:3rem;">✨ No items found. Be the first to sell!</div>'}</div></div>
-                <div class="footer"><i class="fas fa-handshake"></i> Swapify — Click any product for details</div>
-                
-                <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><input type="text" id="prodLocation" placeholder="Location" value="Pakistan"><div class="upload-zone" onclick="document.getElementById('imageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Click to upload image</div><input type="file" id="imageFile" accept="image/*" style="display:none"><div id="imagePreviewDiv" class="preview-img"></div><input type="hidden" id="imageBase64Hidden"><button type="submit" class="modal-btn">Publish Item</button></form></div></div>
-                
-                <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('redeemModal')">&times;</span><h3>Redeem Code</h3><input type="text" id="codeInput" placeholder="Enter promo code"><button id="redeemBtn" class="modal-btn">Redeem Now</button><p style="text-align:center; font-size:0.7rem; margin-top:0.8rem;">Codes: SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
-                
-                <div id="requestCoinsModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('requestCoinsModal')">&times;</span><h3>Request Coins</h3><input type="number" id="reqAmount" placeholder="Amount" min="10"><textarea id="reqReason" rows="3" placeholder="Reason for coins"></textarea><button id="submitRequestBtn" class="modal-btn">Submit via WhatsApp</button></div></div>
-                
-                <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div class="profile-avatar"><i class="fas fa-user-astronaut"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>Coins:</span><span><strong>${currentUser.coins}</strong></span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>
-            `;
+                <div class="hero-slider"><div class="slider-container"><div class="slider-images" id="sliderImages"></div><button class="slider-btn slider-left" id="sliderLeft"><i class="fas fa-chevron-left"></i></button><button class="slider-btn slider-right" id="sliderRight"><i class="fas fa-chevron-right"></i></button><div class="slider-dots" id="sliderDots"></div></div></div>
+                <div class="container"><h2 class="section-title">✨ Fresh Swaps</h2><div class="products-grid">${products.length ? productsHTML : '<div style="text-align:center; padding:3rem;">✨ No items found.</div>'}</div></div>
+                <footer class="footer"><div class="footer-container"><div class="footer-section"><h4><i class="fas fa-exchange-alt"></i> Swapify</h4><p>Pakistan's trusted peer-to-peer swap marketplace. Trade items safely with virtual coins.</p><div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div></div><div class="footer-section"><h4>Quick Links</h4><a href="#">How it Works</a><a href="#">Safety Tips</a><a href="#">FAQs</a><a href="#">Contact Support</a></div><div class="footer-section"><h4>Legal</h4><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a><a href="#">Coin Policy</a></div><div class="footer-section"><h4>Contact</h4><p><i class="fas fa-envelope"></i> support@swapify.com</p><p><i class="fab fa-whatsapp"></i> +92 300 1234567</p><p><i class="fas fa-map-marker-alt"></i> Pakistan</p></div></div><div class="footer-bottom"><p>&copy; 2025 Swapify Marketplace. All rights reserved. Swap, Sell, Save — The Future of Trading.</p></div></footer>
+                <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><div class="upload-group"><label class="upload-label"><i class="fas fa-camera"></i> Main Image</label><div class="upload-zone-single" id="mainUploadZone"><i class="fas fa-cloud-upload-alt"></i> Click to upload</div><input type="file" id="mainImageFile" accept="image/*" style="display:none"><div id="mainPreview" class="preview-img-grid"></div></div><div class="upload-group"><label class="upload-label"><i class="fas fa-images"></i> Extra Images (max 3)</label><div class="upload-zone-single" id="extraUploadZone"><i class="fas fa-plus-circle"></i> Upload extra</div><input type="file" id="extraImagesFile" accept="image/*" multiple style="display:none"><div id="extraPreview" class="preview-img-grid"></div></div><button type="submit" class="modal-btn">Publish Item</button></form></div></div>
+                <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('redeemModal')">&times;</span><h3>Redeem Code</h3><input type="text" id="codeInput" placeholder="Enter code"><button id="redeemBtn" class="modal-btn">Redeem</button><p style="text-align:center; font-size:0.7rem; margin-top:0.8rem;">Codes: SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
+                <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div style="text-align:center; font-size:2.5rem; color:#2563eb;"><i class="fas fa-user-circle"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>📧 Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>📞 WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>💰 Coins:</span><span><strong>${currentUser.coins}</strong></span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
+            initSlider(sliderBanners);
             attachEvents(products);
         }
+        
+        function initSlider(images) { let idx=0; const sliderImgDiv = document.getElementById('sliderImages'); const dotsDiv=document.getElementById('sliderDots'); if(!sliderImgDiv) return; sliderImgDiv.innerHTML=images.map(img=>`<img class="slide-banner" src="${img}">`).join(''); dotsDiv.innerHTML=images.map((_,i)=>`<div class="dot ${i===0?'active':''}" data-index="${i}"></div>`).join(''); const updateSlider=()=>{ sliderImgDiv.style.transform=`translateX(-${idx*100}%)`; document.querySelectorAll('.dot').forEach((d,i)=>{ if(i===idx)d.classList.add('active'); else d.classList.remove('active'); }); }; document.getElementById('sliderLeft').onclick=()=>{ idx=(idx-1+images.length)%images.length; updateSlider(); }; document.getElementById('sliderRight').onclick=()=>{ idx=(idx+1)%images.length; updateSlider(); }; document.querySelectorAll('.dot').forEach(dot=>{ dot.onclick=()=>{ idx=parseInt(dot.dataset.index); updateSlider(); }; }); setInterval(()=>{ idx=(idx+1)%images.length; updateSlider(); }, 5000); }
         
         function attachEvents(products) {
             document.getElementById('headerSearchBtn').onclick = () => renderHomePage(document.getElementById('headerSearchInput').value);
             document.getElementById('headerSearchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') renderHomePage(e.target.value); });
             document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('swapify_user'); currentUser = null; renderLoginPage(); };
             document.getElementById('profileBtn').onclick = () => document.getElementById('profileModalView').style.display = 'flex';
-            document.getElementById('sellIconBtn').onclick = () => { document.getElementById('productForm').reset(); document.getElementById('imagePreviewDiv').innerHTML = ''; document.getElementById('sellModal').style.display = 'flex'; };
-            document.getElementById('coinsIconBtn').onclick = () => showToast(`💰 Balance: ${currentUser.coins} coins`, false);
+            document.getElementById('sellIconBtn').onclick = () => document.getElementById('sellModal').style.display = 'flex';
+            document.getElementById('coinsIconBtn').onclick = () => showToast(`💰 Balance: ${currentUser.coins} coins`);
             document.getElementById('redeemIconBtn').onclick = () => document.getElementById('redeemModal').style.display = 'flex';
-            document.getElementById('requestCoinsBtn').onclick = () => document.getElementById('requestCoinsModal').style.display = 'flex';
-            document.getElementById('submitRequestBtn').onclick = () => {
-                const amount = document.getElementById('reqAmount').value;
-                if(!amount || amount < 10) { showToast("Enter valid amount (min 10)", true); return; }
-                showToast("Request sent to admin via WhatsApp", false);
-                closeModal('requestCoinsModal');
-            };
+            document.getElementById('requestCoinsBtn').onclick = () => openRequestCoinsModal();
             document.getElementById('redeemBtn').onclick = async () => { const code = document.getElementById('codeInput').value; if(await redeemCode(code)){ closeModal('redeemModal'); renderHomePage(currentSearch); } };
-            
-            document.querySelectorAll('.product-card').forEach(card => {
-                const productId = card.dataset.productId;
-                const product = cachedProducts.find(p => p.id === productId);
-                if(product) card.addEventListener('click', (e) => { if(!e.target.closest('.action-buttons')) showProductDetail(product); });
-            });
+            document.querySelectorAll('.product-card').forEach(card => { const pid = card.dataset.productId; const prod = cachedProducts.find(p=>p.id===pid); if(prod) card.addEventListener('click', (e) => { if(!e.target.closest('.action-buttons')) showProductDetail(prod); }); });
             document.querySelectorAll('.btn-buy').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); purchaseRedirect(btn.dataset.sid, btn.dataset.pname, parseInt(btn.dataset.price), btn.dataset.sname); });
-            document.querySelectorAll('.btn-swap').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); showToast(`Swap request sent`, false); window.open(`https://wa.me/?text=Swap%20request`, '_blank'); });
+            document.querySelectorAll('.btn-swap').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); window.open(`https://wa.me/?text=Swap%20${encodeURIComponent(btn.dataset.pname)}`,'_blank'); showToast(`Swap opened`,false); });
             document.querySelectorAll('.btn-delete').forEach(btn => btn.onclick = async (e) => { e.stopPropagation(); if(confirm("Delete?")) if(await deleteProduct(btn.dataset.pid)) renderHomePage(currentSearch); });
             
-            document.getElementById('productForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const file = document.getElementById('imageFile').files[0];
-                let imgBase64 = '';
-                if(file) {
-                    try {
-                        imgBase64 = await imageToBase64(file);
-                    } catch(err) { showToast(err, true); return; }
-                }
-                const data = { productName: document.getElementById('prodName').value, description: document.getElementById('prodDesc').value, priceCoins: parseInt(document.getElementById('prodPrice').value), location: document.getElementById('prodLocation').value, imageUrl: imgBase64 };
-                if(!data.productName || data.priceCoins < 1) { showToast("Valid name & price needed", true); return; }
-                if(await addProduct(data)) { closeModal('sellModal'); renderHomePage(currentSearch); }
-            };
-            document.getElementById('imageFile').onchange = async (e) => { if(e.target.files[0]){ const b64 = await imageToBase64(e.target.files[0]); document.getElementById('imageBase64Hidden').value = b64; document.getElementById('imagePreviewDiv').innerHTML = `<img src="${b64}">`; } };
+            const mainZone = document.getElementById('mainUploadZone'); const mainFile = document.getElementById('mainImageFile'); const mainPreview = document.getElementById('mainPreview');
+            const extraZone = document.getElementById('extraUploadZone'); const extraFile = document.getElementById('extraImagesFile'); const extraPreview = document.getElementById('extraPreview');
+            let mainBase64 = null; let extraBase64List = [];
+            if(mainZone) mainZone.onclick = () => mainFile.click();
+            mainFile.onchange = async (e) => { if(e.target.files[0]){ try { mainBase64 = await imageToBase64(e.target.files[0]); mainPreview.innerHTML = `<img src="${mainBase64}">`; } catch(err){ showToast(err,true); } } };
+            if(extraZone) extraZone.onclick = () => extraFile.click();
+            extraFile.onchange = async (e) => { let files = Array.from(e.target.files).slice(0,3); extraBase64List = []; extraPreview.innerHTML = ''; for(let f of files){ try { let b64 = await imageToBase64(f); extraBase64List.push(b64); extraPreview.innerHTML += `<img src="${b64}">`; } catch(err){ showToast(err,true); } } };
+            document.getElementById('productForm').onsubmit = async (e) => { e.preventDefault(); const name = document.getElementById('prodName').value; const desc = document.getElementById('prodDesc').value; const price = parseInt(document.getElementById('prodPrice').value); if(!name || price<1){ showToast("Valid name & price",true); return; } if(!mainBase64){ showToast("Main image required",true); return; } if(await addProduct({ productName: name, description: desc, priceCoins: price, location: 'Pakistan' }, mainBase64, extraBase64List)){ closeModal('sellModal'); renderHomePage(currentSearch); } };
         }
-        
-        function closeModal(id) { if(document.getElementById(id)) document.getElementById(id).style.display = 'none'; }
+        function closeModal(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
         window.closeModal = closeModal;
         
-        async function renderLoginPage() {
-            document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:#ffffff; padding:1rem;"><div style="background:white; border-radius:48px; max-width:400px; width:90%; padding:1.8rem; box-shadow:0 20px 35px -15px rgba(0,0,0,0.08); border:1px solid #eef2f8;"><div style="text-align:center;"><i class="fas fa-handshake fa-3x" style="color:#2d2d2d;"></i><h1 style="margin:10px 0;">Swapify</h1><p style="color:#6c819a;">Pakistan's trusted swap marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#f1f5f9; color:#1a1a1a;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password (min 6)"><button id="doSignupBtn" class="modal-btn">Create Account (100 free coins)</button></div></div></div>`;
-            
-            document.getElementById('showLoginTab').onclick = () => { document.getElementById('loginPanel').style.display='block'; document.getElementById('signupPanel').style.display='none'; };
-            document.getElementById('showSignupTab').onclick = () => { document.getElementById('loginPanel').style.display='none'; document.getElementById('signupPanel').style.display='block'; };
-            document.getElementById('doLoginBtn').onclick = async () => { 
-                let res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); 
-                if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user', JSON.stringify(currentUser)); renderHomePage(); } 
-                else { showToast(res.message || "Login failed", true); }
-            };
-            document.getElementById('doSignupBtn').onclick = async () => { 
-                let res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); 
-                if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user', JSON.stringify(currentUser)); showToast(`Welcome ${currentUser.name}! You have 100 coins.`, false); renderHomePage(); } 
-                else { showToast(res.message || "Registration failed", true); }
-            };
-        }
+        async function renderLoginPage() { document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center;"><div style="background:white; border-radius:48px; max-width:420px; width:90%; padding:2rem; box-shadow:0 20px 30px -10px rgba(0,0,0,0.05);"><div style="text-align:center;"><i class="fas fa-exchange-alt fa-3x" style="color:#2563eb;"></i><h1 style="margin:8px 0;">Swapify</h1><p>Blue Marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#e2e8f0; color:#1e293b;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password"><button id="doSignupBtn" class="modal-btn">Create Account (100 coins)</button></div></div></div>`; 
+            document.getElementById('showLoginTab').onclick = () => { document.getElementById('loginPanel').style.display='block'; document.getElementById('signupPanel').style.display='none'; }; document.getElementById('showSignupTab').onclick = () => { document.getElementById('loginPanel').style.display='none'; document.getElementById('signupPanel').style.display='block'; };
+            document.getElementById('doLoginBtn').onclick = async () => { const res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); renderHomePage(); } else showToast("Invalid credentials",true); };
+            document.getElementById('doSignupBtn').onclick = async () => { const res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); showToast(`Welcome ${currentUser.name}! +100 coins`); renderHomePage(); } else showToast(res.message||"Signup error",true); }; }
         
-        const savedUser = localStorage.getItem('swapify_user');
-        if(savedUser) { 
-            try { 
-                currentUser = JSON.parse(savedUser); 
-                renderHomePage(); 
-            } catch(e){ renderLoginPage(); } 
-        } else { renderLoginPage(); }
+        const savedUser = localStorage.getItem('swapify_user'); if(savedUser) { try { currentUser = JSON.parse(savedUser); renderHomePage(); } catch(e){ renderLoginPage(); } } else renderLoginPage();
     })();
 </script>
 </body>
