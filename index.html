@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Swapify — Blue Premium Peer Swap Marketplace</title>
+    <title>Swapify —  Premium Peer Swap Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <style>
     /* ============================================
    SWAPIFY COMPLETE CSS - BLUE THEME
    ============================================ */
-
 * {
     margin: 0;
     padding: 0;
@@ -19,7 +21,7 @@
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: "Poppins", sans-serif;
     background: #ffffff;
     color: #1e2a3a;
     min-height: 100vh;
@@ -91,15 +93,20 @@ p {
 }
 
 /* BUTTONS */
-.btn-buy, .btn-swap, .detail-btn-buy, .detail-btn-swap, 
+.btn-buy, .detail-btn-buy, .detail-btn-swap, 
 .modal-btn, .header-search button, .add-review-btn {
     background: #2563eb;
     color: white;
     border: none;
     transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
-
-.btn-buy:hover, .btn-swap:hover, .detail-btn-buy:hover, 
+.btn-swap{
+    background: #eef2ff;
+    color: #1e3a8a;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+.btn-buy:hover,.detail-btn-buy:hover, 
 .detail-btn-swap:hover, .modal-btn:hover, .header-search button:hover,
 .add-review-btn:hover {
     background: #1d4ed8;
@@ -274,21 +281,26 @@ p {
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.8rem;
+    
 }
 
 .icon-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 6px; /* space between icon & text */
+
     cursor: pointer;
     background: transparent;
-    border: none;
+    border: 1px solid #efefef;
+
     font-weight: 600;
     font-size: 0.7rem;
     color: #334155;
-    padding: 0.5rem 0.9rem;
+
+    padding: 0.7rem 1.2rem; /* 👈 increased inner spacing */
     border-radius: 50px;
+
     transition: all 0.2s;
 }
 
@@ -355,7 +367,7 @@ p {
 }
 
 .slider-btn:hover {
-    background: #2563eb;
+    background: #2564ebc9;
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -389,6 +401,56 @@ p {
     background: #2563eb;
 }
 
+/* Banner Text Overlay Styles (professionally added) */
+.slide-banner-wrapper {
+    position: relative;
+    min-width: 100%;
+}
+.banner-text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 2rem;
+    text-align: left;
+    color: white;
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+}
+.banner-text-overlay h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+    color: white;
+    letter-spacing: -0.3px;
+}
+.banner-text-overlay p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    color: #f1f5f9;
+    margin-bottom: 0;
+}
+.banner-badge {
+    display: inline-block;
+    background: #fbbf24;
+    color: #0f172a;
+    border-radius: 60px;
+    padding: 0.2rem 1rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+@media (max-width: 768px) {
+    .banner-text-overlay { padding: 1rem 1.2rem; }
+    .banner-text-overlay h3 { font-size: 1.1rem; }
+    .banner-text-overlay p { font-size: 0.7rem; }
+    .banner-badge { font-size: 0.6rem; }
+}
+@media (max-width: 550px) {
+    .banner-text-overlay { padding: 0.8rem 1rem; }
+    .banner-text-overlay h3 { font-size: 0.9rem; }
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -417,11 +479,12 @@ p {
     background: #ffffff;
     border-radius: 4px;
     overflow: hidden;
-    border: 1px solid #eef2ff;
+    border: 1px solid #f3f3f3;
     transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
     animation: scalePop 0.4s ease backwards;
+    position: relative;
 }
 
 .product-card:hover {
@@ -429,10 +492,156 @@ p {
     box-shadow: 0 25px 35px -12px rgba(37, 99, 235, 0.2);
     border-color: #bfdbfe;
 }
+.wishlist-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    
+    /* Better button sizing and spacing */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    
+    /* Improved visual design */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    
+    /* Better shadow for depth */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 
+                0 1px 2px rgba(0, 0, 0, 0.05);
+    
+    /* Flex centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Remove default button styles */
+    border: none;
+    cursor: pointer;
+    
+    /* Icon color */
+    color: #374151;
+    
+    /* Smooth transitions */
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Ensure proper layering */
+    z-index: 10;
+    
+    /* Better focus outline for accessibility */
+    outline: none;
+}
 
+/* Hover state - more refined */
+.wishlist-btn:hover {
+    transform: scale(1.08);
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), 
+                0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Active/click state */
+.wishlist-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.05s ease;
+}
+
+/* Focus state for keyboard navigation */
+.wishlist-btn:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Wish icon styling */
+.wishlist-btn .wish-icon {
+    width: 18px;
+    height: 18px;
+    transition: all 0.2s ease;
+    color: currentColor;
+}
+
+/* Active wish state (item is in wishlist) */
+.wishlist-btn.active-wish {
+    background: rgba(254, 226, 226, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+.wishlist-btn.active-wish .wish-icon {
+    color: #ef4444;
+    fill: currentColor;
+    transform: scale(1.05);
+}
+
+/* Optional: Add a subtle pulse animation for the first time user adds to wishlist */
+.wishlist-btn.active-wish .wish-icon {
+    animation: wishPulse 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes wishPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+/* Optional: Loading state for API calls */
+.wishlist-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.wishlist-btn.loading .wish-icon {
+    animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .wishlist-btn {
+        width: 32px;
+        height: 32px;
+        top: 8px;
+        right: 8px;
+    }
+    
+    .wishlist-btn .wish-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Optional: RTL support */
+[dir="rtl"] .wishlist-btn {
+    right: auto;
+    left: 12px;
+}
+
+@media (max-width: 768px) {
+    [dir="rtl"] .wishlist-btn {
+        left: 8px;
+    }
+}
 .product-image {
     width: 100%;
-    height: 220px;
+    height: 230px;
     object-fit: cover;
     background: #f8fafc;
     transition: transform 0.4s;
@@ -459,6 +668,7 @@ p {
     font-size: 1rem;
     font-weight: 800;
     color: #0f172a;
+    padding-right: 30px;
 }
 
 .coin-tag {
@@ -983,15 +1193,23 @@ p {
     .main-gallery-img { height: 260px; }
     .thumbnail { width: 55px; height: 55px; }
     .detail-title { font-size: 1.4rem; }
-    .footer-container { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
-    .footer-section h4::after { left: 50%; transform: translateX(-50%); }
-    .footer-social { justify-content: center; }
+
+/* Responsive: Keep left alignment on mobile too */
+@media (max-width: 768px) {
+    .footer-container { 
+        text-align: left; /* Maintain left alignment on mobile */
+    }
+    
+    .footer-social { 
+        justify-content: flex-start; /* Maintain left alignment on mobile */
+    }
+}
 }
 
 @media (max-width: 550px) {
     .nav-container {
         padding: 0 1rem;
-        margin-top: -4px; /* reduces extra header height */
+        margin-top: -4px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1010,7 +1228,7 @@ p {
     }
 
     .logo-image {
-        height: 100px; /* bigger logo without stretching navbar */
+        height: 100px;
         width: auto;
         max-width: 160px;
         object-fit: contain;
@@ -1045,8 +1263,8 @@ p {
             .logo-area {
     width: 100%;
     display: flex;
-    align-items: center;      /* vertical center */
-    justify-content: center;  /* horizontal center */
+    align-items: center;
+    justify-content: center;
     gap: 0.6rem;
     flex-wrap: wrap;
 }
@@ -1064,7 +1282,7 @@ p {
 }
 
 .logo-img {
-    height: 42px; /* better visible size */
+    height: 42px;
     width: auto;
     display: block;
     object-fit: contain;
@@ -1073,7 +1291,7 @@ p {
 .header-search {
     width: 100%;
     flex: auto;
-    margin-top: -28px; /* adjusted top spacing */
+    margin-top: -28px;
     padding: 0.15rem 0.15rem 0.15rem 0.8rem;
 }
             .header-search input {
@@ -1103,7 +1321,7 @@ p {
                 justify-content: center;
             }
             .icon-item {
-                padding: 0.2rem 0.4rem;
+                padding: 0.7rem 1.2rem; /* 👈 increased inner spacing */
                 font-size: 0.45rem;
             }
         }
@@ -1122,6 +1340,24 @@ p {
                 font-size: 0.6rem;
             }
         }
+        /* SVG Icon Styles */
+.svg-icon {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+    vertical-align: middle;
+    display: inline-block;
+}
+.svg-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+.svg-icon-md {
+    width: 20px;
+    height: 20px;
+}
 </style>
 </head>
 <body>
@@ -1135,6 +1371,7 @@ p {
         let currentUser = null;
         let cachedProducts = [];
         let currentSearch = '';
+        let wishlist = new Set(); // store product ids in wishlist
         
         function showToast(msg, isErr = false) { 
             let div = document.createElement('div'); div.className = 'toast'; div.innerHTML = `<i class="fas ${isErr ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${escapeHtml(msg)}`; 
@@ -1177,7 +1414,7 @@ p {
         async function deleteProduct(productId) {
             const { error } = await supabase.from('products').delete().eq('id', productId).eq('seller_id', currentUser.id);
             if (error) return false;
-            showToast("🗑️ Removed", false); return true;
+            showToast("Removed", false); return true;
         }
         
         async function addReview(productId, rating, comment) {
@@ -1196,7 +1433,7 @@ p {
         
         async function sendCoinRequest(amount, reason) {
             const adminWhatsApp = "+923361871497";
-            const message = `💰 COIN REQUEST\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nRequested Amount: ${amount} coins\nReason: ${reason}\nCurrent Balance: ${currentUser.coins}`;
+            const message = `COIN REQUEST\nUser: ${currentUser.name}\nEmail: ${currentUser.email}\nRequested Amount: ${amount} coins\nReason: ${reason}\nCurrent Balance: ${currentUser.coins}`;
             window.open(`https://wa.me/${adminWhatsApp.replace('+','')}?text=${encodeURIComponent(message)}`, '_blank');
             showToast(`Request sent to admin!`, false);
             return true;
@@ -1219,7 +1456,32 @@ p {
         async function redeemCode(code) { const valid = { 'SWAPIFY100':100, 'WELCOME50':50, 'GOLD200':200, 'TRADEPK':150 }; const upper=code.toUpperCase(); if(!valid[upper]){ showToast("Invalid",true); return false; } const {data:u}=await supabase.from('users').select('*').eq('id', currentUser.id).single(); if(u.used_codes?.[upper]){ showToast("Used",true); return false; } const newCoins=u.coins+valid[upper]; u.used_codes=u.used_codes||{}; u.used_codes[upper]=new Date(); const {error}=await supabase.from('users').update({coins:newCoins, used_codes:u.used_codes}).eq('id',currentUser.id); if(error) return false; currentUser.coins=newCoins; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); showToast(`+${valid[upper]} coins!`,false); return true; }
         async function purchaseRedirect(sellerId, productName, price, sellerName){ if(currentUser.coins<price){ showToast(`Need ${price} coins`,true); return; } const {data:sellerInfo}=await supabase.from('users').select('phone').eq('id',sellerId).single(); if(!sellerInfo?.phone){ showToast("No contact",true); return; } const msg=`BUY: "${productName}" for ${price} coins\nBuyer: ${currentUser.name}\nWhatsApp: ${currentUser.phone}`; window.open(`https://wa.me/${sellerInfo.phone.replace('+','')}?text=${encodeURIComponent(msg)}`,'_blank'); showToast(`Inquiry sent`,false); }
         
-        function showProductDetail(product) {
+        // Wishlist functions
+        function toggleWishlist(productId) {
+            if(!currentUser) { showToast("Login to add wishlist", true); return false; }
+            if(wishlist.has(productId)) {
+                wishlist.delete(productId);
+                showToast("Removed from wishlist", false);
+            } else {
+                wishlist.add(productId);
+                showToast("❤️ Added to wishlist", false);
+            }
+            renderHomePage(currentSearch); // re-render to update heart icons
+            return true;
+        }
+        
+        // SVG Icons (unchanged)
+        const icons = {
+            search: '<svg class="svg-icon svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>',
+            user: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>',
+            logout: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"/></svg>',
+            coins: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>',
+            redeem: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/></svg>',
+            xmark: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>',
+            plus: '<svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>'
+        };
+        
+        function showProductDetail(product) { 
             const isOwner = currentUser.id === product.seller_id;
             const mainImg = product.image_url || 'https://placehold.co/800x500/f8fafc/2563eb?text=Swap+Item';
             const extraImgs = product.extra_images || [];
@@ -1231,7 +1493,9 @@ p {
             else reviews.forEach(rev => { reviewsHtml += `<div class="review-card"><div class="review-stars">${'★'.repeat(rev.rating)}${'☆'.repeat(5-rev.rating)}</div><div class="review-text">${escapeHtml(rev.comment)}</div><div class="reviewer-name">— ${escapeHtml(rev.reviewer)}</div></div>`; });
             reviewsHtml += `</div>${!isOwner ? `<button class="add-review-btn" id="openReviewModalBtn"><i class="fas fa-star"></i> Write Review (+5 coins)</button>` : ''}`;
             let thumbnailsHtml = `<div class="thumbnail-strip">${allImages.map((img, idx) => `<img class="thumbnail ${idx===0?'active-thumb':''}" data-img="${escapeHtml(img)}" src="${escapeHtml(img)}">`).join('')}</div>`;
-            const detailHTML = `<div class="product-detail-page" id="productDetailPage"><div class="detail-header"><button class="back-btn" id="closeDetailBtn"><i class="fas fa-arrow-left"></i></button><h3>Product Details</h3></div><div class="detail-grid"><div class="gallery-slider"><img id="galleryMain" class="main-gallery-img" src="${escapeHtml(allImages[0])}">${thumbnailsHtml}</div><div><h1 class="detail-title">${escapeHtml(product.product_name)}</h1><div class="detail-price">${product.price_coins} Coins</div><p style="margin:1rem 0; line-height:1.6;">${escapeHtml(product.description || 'No description provided.')}</p><div class="detail-seller-card"><p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p><p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.location)}</p></div>${!isOwner ? `<div class="detail-buttons"><button class="detail-btn detail-btn-buy" id="detailBuyBtn"><i class="fas fa-shopping-cart"></i> Buy Now</button><button class="detail-btn detail-btn-swap" id="detailSwapBtn"><i class="fab fa-whatsapp"></i> Swap</button></div>` : `<div class="detail-buttons"><button class="detail-btn detail-btn-delete" id="detailDeleteBtn"><i class="fas fa-trash"></i> Delete</button></div>`}${reviewsHtml}</div></div></div>`;
+            const detailHTML = `<div class="product-detail-page" id="productDetailPage"><div class="detail-header"><button class="back-btn" id="closeDetailBtn"><i class="fas fa-arrow-left"></i></button><h3>Product Details</h3></div><div class="detail-grid"><div class="gallery-slider"><img id="galleryMain" class="main-gallery-img" src="${escapeHtml(allImages[0])}">${thumbnailsHtml}</div><div><h1 class="detail-title">${escapeHtml(product.product_name)}</h1><div class="detail-price">${product.price_coins} Coins</div><p style="margin:1rem 0; line-height:1.6;">${escapeHtml(product.description || 'No description provided.')}</p><div class="detail-seller-card"><p><i class="fas fa-user-circle"></i> <strong>${escapeHtml(product.seller_name)}</strong></p><p><i class="fas fa-map-marker-alt"></i> ${escapeHtml(product.location)}</p></div>${!isOwner ? `<div class="detail-buttons"><button class="detail-btn detail-btn-buy" id="detailBuyBtn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round"  stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg>
+ Buy Now</button><button class="detail-btn detail-btn-swap" id="detailSwapBtn"><i class="fab fa-whatsapp"></i> Swap</button></div>` : `<div class="detail-buttons"><button class="detail-btn detail-btn-delete" id="detailDeleteBtn">${icons.xmark} Delete</button></div>`}${reviewsHtml}</div></div></div>`;
             document.body.insertAdjacentHTML('beforeend', detailHTML);
             const mainImgEl = document.getElementById('galleryMain');
             document.querySelectorAll('.thumbnail').forEach(thumb => { thumb.onclick = () => { mainImgEl.src = thumb.dataset.img; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active-thumb')); thumb.classList.add('active-thumb'); }; });
@@ -1272,34 +1536,89 @@ p {
         async function renderHomePage(searchTerm = '') {
             currentSearch = searchTerm;
             const products = await loadProducts(searchTerm);
-            const productsHTML = products.map(p => `<div class="product-card" data-product-id="${p.id}"><img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/400x200/f8fafc/2563eb?text=Item')}"><div class="product-info"><div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins}</span></div><div class="product-desc">${escapeHtml(truncateText(p.description || '', 60))}</div><div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div><div class="action-buttons" onclick="event.stopPropagation()">${currentUser.id !== p.seller_id ? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}">Swap</button>` : `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}</div></div></div>`).join('');
-            const sliderBanners = ['https://images.pexels.com/photos/4450334/pexels-photo-4450334.jpeg?auto=compress&w=1200', 'https://images.pexels.com/photos/909907/pexels-photo-909907.jpeg?auto=compress&w=1200', 'https://images.pexels.com/photos/5632381/pexels-photo-5632381.jpeg?auto=compress&w=1200'];
+            // Products HTML with wishlist button
+            const productsHTML = products.map(p => {
+                const inWish = wishlist.has(p.id);
+                return `<div class="product-card" data-product-id="${p.id}">
+                    <button class="wishlist-btn ${inWish ? 'active-wish' : ''}" data-wish-id="${p.id}">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         fill="${inWish ? 'currentColor' : 'none'}" 
+         viewBox="0 0 24 24" 
+         stroke-width="1.5" 
+         stroke="currentColor" 
+         class="wish-icon">
+        <path stroke-linecap="round" 
+              stroke-linejoin="round" 
+              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+    </svg>
+</button>
+                    <img class="product-image" src="${escapeHtml(p.image_url || 'https://placehold.co/400x200/f8fafc/2563eb?text=Item')}">
+                    <div class="product-info"><div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins}</span></div>
+                    <div class="product-desc">${escapeHtml(truncateText(p.description || '', 60))}</div>
+                    <div class="seller-row"><i class="fas fa-user-circle"></i> ${escapeHtml(p.seller_name)}<span style="margin-left:auto;"><i class="fas fa-location-dot"></i> ${escapeHtml(p.location)}</span></div>
+                    <div class="action-buttons" onclick="event.stopPropagation()">${currentUser.id !== p.seller_id ? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}" data-sname="${escapeHtml(p.seller_name).replace(/'/g, "\\'")}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name).replace(/'/g, "\\'")}">Swap</button>` : `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}</div></div></div>`;
+            }).join('');
+            
+            // slider banners with professional text overlays
+            const sliderBanners = [
+                { img: 'https://images.pexels.com/photos/4450334/pexels-photo-4450334.jpeg?auto=compress&w=1200', title: 'Premium Smartphone Exchange', desc: 'Latest models | PTA approved | Best deals', badge: 'HOT DEALS' },
+                { img: 'https://images.pexels.com/photos/909907/pexels-photo-909907.jpeg?auto=compress&w=1200', title: 'Swap with Virtual Coins', desc: 'Trade safely, earn rewards, and grow your collection', badge: 'ECO SYSTEM' },
+                { img: 'https://images.pexels.com/photos/5632381/pexels-photo-5632381.jpeg?auto=compress&w=1200', title: 'Join 10,000+ Swappers', desc: 'Pakistan’s most trusted peer marketplace', badge: 'TRUSTED' }
+            ];
+            const slidesHtml = sliderBanners.map(b => `
+                <div class="slide-banner-wrapper">
+                    <img class="slide-banner" src="${b.img}" alt="Swap banner">
+                    <div class="banner-text-overlay">
+                        <div class="banner-badge">${b.badge}</div>
+                        <h3>${b.title}</h3>
+                        <p>${b.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+            
             document.getElementById('root').innerHTML = `
-                <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img class="logo-image" src="logo.png" alt="Swapify Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="fallback-text" style="display:none;">Swapify</span></div><div class="header-search"><i class="fas fa-search" style="color:#2563eb;"></i><input type="text" id="headerSearchInput" placeholder="Search items..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><i class="fas fa-coins"></i> ${currentUser.coins} <i class="fas fa-plus-circle"></i></span><button class="nav-icon-btn" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button><button class="nav-icon-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div></nav>
-                <div class="icon-bar"><button class="icon-item" id="sellIconBtn"><i class="fas fa-plus-circle"></i><span>Sell</span></button><button class="icon-item" id="coinsIconBtn"><i class="fas fa-coins"></i><span>Coins</span></button><button class="icon-item" id="redeemIconBtn"><i class="fas fa-ticket-alt"></i><span>Redeem</span></button></div>
-                <div class="hero-slider"><div class="slider-container"><div class="slider-images" id="sliderImages"></div><button class="slider-btn slider-left" id="sliderLeft"><i class="fas fa-chevron-left"></i></button><button class="slider-btn slider-right" id="sliderRight"><i class="fas fa-chevron-right"></i></button><div class="slider-dots" id="sliderDots"></div></div></div>
-                <div class="container"><h2 class="section-title">✨ Fresh Swaps</h2><div class="products-grid">${products.length ? productsHTML : '<div style="text-align:center; padding:3rem;">✨ No items found.</div>'}</div></div>
+                <nav class="navbar"><div class="nav-container"><div class="logo-area"><div class="brand-logo"><img class="logo-image" src="logo.png" alt="Swapify Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><span class="fallback-text" style="display:none;">Swapify</span></div><div class="header-search">${icons.search}<input type="text" id="headerSearchInput" placeholder="Search items..." value="${escapeHtml(searchTerm)}"><button id="headerSearchBtn">${icons.search} Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn">${icons.coins} ${currentUser.coins} ${icons.plus}</span><button class="nav-icon-btn" id="profileBtn">${icons.user} Profile</button><button class="nav-icon-btn" id="logoutBtn">${icons.logout} Logout</button></div></div></nav>
+                <div class="icon-bar"><button class="icon-item" id="sellIconBtn">${icons.redeem}<span>Sell</span></button><button class="icon-item" id="coinsIconBtn">${icons.coins}<span>Coins</span></button><button class="icon-item" id="redeemIconBtn">${icons.redeem}<span>Redeem</span></button></div>
+                <div class="hero-slider"><div class="slider-container"><div class="slider-images" id="sliderImages">${slidesHtml}</div><button class="slider-btn slider-left" id="sliderLeft"><i class="fas fa-chevron-left"></i></button><button class="slider-btn slider-right" id="sliderRight"><i class="fas fa-chevron-right"></i></button><div class="slider-dots" id="sliderDots"></div></div></div>
+                <div class="container"><h2 class="section-title"> Fresh Swaps</h2><div class="products-grid">${products.length ? productsHTML : '<div style="text-align:center; padding:3rem;"> No items found.</div>'}</div></div>
                 <footer class="footer"><div class="footer-container"><div class="footer-section"><h4><i class="fas fa-exchange-alt"></i> Swapify</h4><p>Pakistan's trusted peer-to-peer swap marketplace. Trade items safely with virtual coins.</p><div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div></div><div class="footer-section"><h4>Quick Links</h4><a href="#">How it Works</a><a href="#">Safety Tips</a><a href="#">FAQs</a><a href="#">Contact Support</a></div><div class="footer-section"><h4>Legal</h4><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Refund Policy</a><a href="#">Coin Policy</a></div><div class="footer-section"><h4>Contact</h4><p><i class="fas fa-envelope"></i> support@swapify.com</p><p><i class="fab fa-whatsapp"></i> +92 300 1234567</p><p><i class="fas fa-map-marker-alt"></i> Pakistan</p></div></div><div class="footer-bottom"><p>&copy; 2025 Swapify Marketplace. All rights reserved. Swap, Sell, Save — The Future of Trading.</p></div></footer>
                 <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><div class="upload-group"><label class="upload-label"><i class="fas fa-camera"></i> Main Image</label><div class="upload-zone-single" id="mainUploadZone"><i class="fas fa-cloud-upload-alt"></i> Click to upload</div><input type="file" id="mainImageFile" accept="image/*" style="display:none"><div id="mainPreview" class="preview-img-grid"></div></div><div class="upload-group"><label class="upload-label"><i class="fas fa-images"></i> Extra Images (max 3)</label><div class="upload-zone-single" id="extraUploadZone"><i class="fas fa-plus-circle"></i> Upload extra</div><input type="file" id="extraImagesFile" accept="image/*" multiple style="display:none"><div id="extraPreview" class="preview-img-grid"></div></div><button type="submit" class="modal-btn">Publish Item</button></form></div></div>
                 <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('redeemModal')">&times;</span><h3>Redeem Code</h3><input type="text" id="codeInput" placeholder="Enter code"><button id="redeemBtn" class="modal-btn">Redeem</button><p style="text-align:center; font-size:0.7rem; margin-top:0.8rem;">Codes: SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
-                <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div style="text-align:center; font-size:2.5rem; color:#2563eb;"><i class="fas fa-user-circle"></i></div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span>📧 Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span>📞 WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span>💰 Coins:</span><span><strong>${currentUser.coins}</strong></span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
-            initSlider(sliderBanners);
+                <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('profileModalView')">&times;</span><div style="text-align:center; font-size:2.5rem; color:#2563eb;">${icons.user}</div><h3 style="text-align:center;">${escapeHtml(currentUser.name)}</h3><div class="info-row"><span> Email:</span><span>${escapeHtml(currentUser.email)}</span></div><div class="info-row"><span> WhatsApp:</span><span>${escapeHtml(currentUser.phone)}</span></div><div class="info-row"><span> Coins:</span><span><strong>${currentUser.coins}</strong></span></div><button onclick="closeModal('profileModalView')" class="modal-btn">Close</button></div></div>`;
+            initSliderWithWrappers();
             attachEvents(products);
         }
         
-        function initSlider(images) { let idx=0; const sliderImgDiv = document.getElementById('sliderImages'); const dotsDiv=document.getElementById('sliderDots'); if(!sliderImgDiv) return; sliderImgDiv.innerHTML=images.map(img=>`<img class="slide-banner" src="${img}">`).join(''); dotsDiv.innerHTML=images.map((_,i)=>`<div class="dot ${i===0?'active':''}" data-index="${i}"></div>`).join(''); const updateSlider=()=>{ sliderImgDiv.style.transform=`translateX(-${idx*100}%)`; document.querySelectorAll('.dot').forEach((d,i)=>{ if(i===idx)d.classList.add('active'); else d.classList.remove('active'); }); }; document.getElementById('sliderLeft').onclick=()=>{ idx=(idx-1+images.length)%images.length; updateSlider(); }; document.getElementById('sliderRight').onclick=()=>{ idx=(idx+1)%images.length; updateSlider(); }; document.querySelectorAll('.dot').forEach(dot=>{ dot.onclick=()=>{ idx=parseInt(dot.dataset.index); updateSlider(); }; }); setInterval(()=>{ idx=(idx+1)%images.length; updateSlider(); }, 5000); }
+        function initSliderWithWrappers() { 
+            let idx=0; 
+            const sliderContainer = document.getElementById('sliderImages');
+            if(!sliderContainer) return;
+            const slides = Array.from(sliderContainer.children);
+            const total = slides.length;
+            const dotsDiv = document.getElementById('sliderDots');
+            if(dotsDiv) dotsDiv.innerHTML = slides.map((_,i)=>`<div class="dot ${i===0?'active':''}" data-index="${i}"></div>`).join('');
+            const updateSlider = () => { sliderContainer.style.transform = `translateX(-${idx*100}%)`; document.querySelectorAll('.dot').forEach((d,i)=>{ if(i===idx) d.classList.add('active'); else d.classList.remove('active'); }); };
+            const leftBtn = document.getElementById('sliderLeft');
+            const rightBtn = document.getElementById('sliderRight');
+            if(leftBtn) leftBtn.onclick = () => { idx = (idx-1+total)%total; updateSlider(); };
+            if(rightBtn) rightBtn.onclick = () => { idx = (idx+1)%total; updateSlider(); };
+            document.querySelectorAll('.dot').forEach(dot => { dot.onclick = () => { idx = parseInt(dot.dataset.index); updateSlider(); }; });
+            setInterval(() => { idx = (idx+1)%total; updateSlider(); }, 5000);
+        }
         
         function attachEvents(products) {
             document.getElementById('headerSearchBtn').onclick = () => renderHomePage(document.getElementById('headerSearchInput').value);
             document.getElementById('headerSearchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') renderHomePage(e.target.value); });
-            document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('swapify_user'); currentUser = null; renderLoginPage(); };
+            document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('swapify_user'); currentUser = null; wishlist.clear(); renderLoginPage(); };
             document.getElementById('profileBtn').onclick = () => document.getElementById('profileModalView').style.display = 'flex';
             document.getElementById('sellIconBtn').onclick = () => document.getElementById('sellModal').style.display = 'flex';
-            document.getElementById('coinsIconBtn').onclick = () => showToast(`💰 Balance: ${currentUser.coins} coins`);
+            document.getElementById('coinsIconBtn').onclick = () => showToast(` Balance: ${currentUser.coins} coins`);
             document.getElementById('redeemIconBtn').onclick = () => document.getElementById('redeemModal').style.display = 'flex';
             document.getElementById('requestCoinsBtn').onclick = () => openRequestCoinsModal();
             document.getElementById('redeemBtn').onclick = async () => { const code = document.getElementById('codeInput').value; if(await redeemCode(code)){ closeModal('redeemModal'); renderHomePage(currentSearch); } };
-            document.querySelectorAll('.product-card').forEach(card => { const pid = card.dataset.productId; const prod = cachedProducts.find(p=>p.id===pid); if(prod) card.addEventListener('click', (e) => { if(!e.target.closest('.action-buttons')) showProductDetail(prod); }); });
+            // wishlist buttons
+            document.querySelectorAll('.wishlist-btn').forEach(btn => { btn.onclick = (e) => { e.stopPropagation(); const pid = btn.dataset.wishId; toggleWishlist(pid); }; });
+            document.querySelectorAll('.product-card').forEach(card => { const pid = card.dataset.productId; const prod = cachedProducts.find(p=>p.id===pid); if(prod) card.addEventListener('click', (e) => { if(!e.target.closest('.action-buttons') && !e.target.closest('.wishlist-btn')) showProductDetail(prod); }); });
             document.querySelectorAll('.btn-buy').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); purchaseRedirect(btn.dataset.sid, btn.dataset.pname, parseInt(btn.dataset.price), btn.dataset.sname); });
             document.querySelectorAll('.btn-swap').forEach(btn => btn.onclick = (e) => { e.stopPropagation(); window.open(`https://wa.me/?text=Swap%20${encodeURIComponent(btn.dataset.pname)}`,'_blank'); showToast(`Swap opened`,false); });
             document.querySelectorAll('.btn-delete').forEach(btn => btn.onclick = async (e) => { e.stopPropagation(); if(confirm("Delete?")) if(await deleteProduct(btn.dataset.pid)) renderHomePage(currentSearch); });
@@ -1316,7 +1635,7 @@ p {
         function closeModal(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
         window.closeModal = closeModal;
         
-        async function renderLoginPage() { document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center;"><div style="background:white; border-radius:48px; max-width:420px; width:90%; padding:2rem; box-shadow:0 20px 30px -10px rgba(0,0,0,0.05);"><div style="text-align:center;"><i class="fas fa-exchange-alt fa-3x" style="color:#2563eb;"></i><h1 style="margin:8px 0;">Swapify</h1><p>Blue Marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#e2e8f0; color:#1e293b;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password"><button id="doSignupBtn" class="modal-btn">Create Account (100 coins)</button></div></div></div>`; 
+        async function renderLoginPage() { document.getElementById('root').innerHTML = `<div style="min-height:100vh; display:flex; align-items:center; justify-content:center;"><div style="background:white; border-radius:48px; max-width:420px; width:90%; padding:2rem; box-shadow:0 20px 30px -10px rgba(0,0,0,0.05);"><div style="text-align:center;"><i class="fas fa-exchange-alt fa-3x" style="color:#2563eb;"></i><h1 style="margin:8px 0;">Swapify</h1><p> Marketplace</p></div><div style="display:flex; gap:10px; margin:24px 0;"><button id="showLoginTab" class="modal-btn" style="margin:0;">Sign In</button><button id="showSignupTab" class="modal-btn" style="margin:0; background:#e2e8f0; color:#1e293b;">Sign Up</button></div><div id="loginPanel"><input type="email" id="loginEmail" placeholder="Email"><input type="password" id="loginPassword" placeholder="Password"><button id="doLoginBtn" class="modal-btn">Login</button></div><div id="signupPanel" style="display:none;"><input type="text" id="signName" placeholder="Full name"><input type="email" id="signEmail" placeholder="Email"><input type="tel" id="signPhone" placeholder="WhatsApp (+92xxxxxxxxxx)"><input type="password" id="signPassword" placeholder="Password"><button id="doSignupBtn" class="modal-btn">Create Account (100 coins)</button></div></div></div>`; 
             document.getElementById('showLoginTab').onclick = () => { document.getElementById('loginPanel').style.display='block'; document.getElementById('signupPanel').style.display='none'; }; document.getElementById('showSignupTab').onclick = () => { document.getElementById('loginPanel').style.display='none'; document.getElementById('signupPanel').style.display='block'; };
             document.getElementById('doLoginBtn').onclick = async () => { const res = await loginUser(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value); if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); renderHomePage(); } else showToast("Invalid credentials",true); };
             document.getElementById('doSignupBtn').onclick = async () => { const res = await registerUser(document.getElementById('signName').value, document.getElementById('signEmail').value, document.getElementById('signPhone').value, document.getElementById('signPassword').value); if(res.success){ currentUser=res.user; localStorage.setItem('swapify_user',JSON.stringify(currentUser)); showToast(`Welcome ${currentUser.name}! +100 coins`); renderHomePage(); } else showToast(res.message||"Signup error",true); }; }
