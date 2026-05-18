@@ -1077,7 +1077,6 @@ p {
 }
 
 .info-row {
-    display: flex;
     justify-content: space-between;
     margin: 10px 0;
     background: #f8fafc;
@@ -1574,9 +1573,258 @@ svg,
 .coin-badge-header svg{
     width:16px;
     height:16px;
-    stroke-width:2.2 !important;
+    stroke-width:2.2 !important;}
+    /* ===============================
+   COIN REQUEST MODAL - FIXED
+   Responsive + Smooth + Mobile Ready
+================================== */
+
+.coin-request-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:2000;
+    padding:1rem;
+
+    animation:fadeSlideUp .3s ease;
+    overflow-y:auto;
 }
-</style>
+
+/* Modal Box */
+.coin-request-content{
+    background:#ffffff;
+    border-radius:28px;
+    width:100%;
+    max-width:450px;
+
+    padding:2rem;
+    position:relative;
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.18),
+        0 10px 25px rgba(0,0,0,0.08);
+
+    animation:scalePop .35s ease;
+}
+
+/* Heading */
+.coin-request-content h3{
+    font-size:1.6rem;
+    font-weight:800;
+    color:#0f172a;
+
+    margin-bottom:0.6rem;
+    text-align:center;
+}
+
+/* Description */
+.coin-request-content p{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:1.5rem;
+    font-size:0.92rem;
+    line-height:1.5;
+}
+
+/* Input */
+.coin-amount-input{
+    width:100%;
+    padding:1rem 1.2rem;
+
+    font-size:1.1rem;
+    font-weight:700;
+    text-align:center;
+
+    border:2px solid #e2e8f0;
+    border-radius:60px;
+
+    background:#f8fafc;
+    color:#0f172a;
+
+    transition:0.3s ease;
+    margin-bottom:1rem;
+}
+
+.coin-amount-input::placeholder{
+    color:#94a3b8;
+}
+
+.coin-amount-input:focus{
+    outline:none;
+    border-color:#2563eb;
+    background:#fff;
+
+    box-shadow:0 0 0 4px rgba(37,99,235,0.12);
+}
+
+/* Buttons Container */
+.coin-request-buttons{
+    display:flex;
+    gap:1rem;
+    margin-top:1.2rem;
+}
+
+/* Buttons */
+.coin-request-btn{
+    flex:1;
+    padding:0.95rem 1rem;
+
+    border:none;
+    border-radius:60px;
+
+    font-size:0.95rem;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+}
+
+/* Primary */
+.coin-request-btn-primary{
+    background:#2563eb;
+    color:white;
+
+    box-shadow:0 10px 20px rgba(37,99,235,0.22);
+}
+
+.coin-request-btn-primary:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* Secondary */
+.coin-request-btn-secondary{
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.coin-request-btn-secondary:hover{
+    background:#cbd5e1;
+    transform:translateY(-2px);
+}
+
+/* Warning */
+.max-limit-warning{
+    font-size:0.78rem;
+    color:#ef4444;
+    text-align:center;
+    margin-top:0.6rem;
+    display:none;
+    font-weight:600;
+}
+
+/* ===============================
+   ANIMATIONS
+================================== */
+
+@keyframes fadeSlideUp{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
+
+@keyframes scalePop{
+    from{
+        opacity:0;
+        transform:scale(.88) translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================== */
+
+@media (max-width:768px){
+
+    .coin-request-modal{
+        padding:1rem;
+    }
+
+    .coin-request-content{
+        width:100%;
+        max-width:100%;
+
+        border-radius:24px 24px 0 0;
+
+        animation:mobilePopup .35s ease;
+    }
+
+    .coin-request-content h3{
+        font-size:1.35rem;
+    }
+
+    .coin-request-content p{
+        font-size:0.85rem;
+    }
+
+    .coin-amount-input{
+        font-size:1rem;
+        padding:0.95rem 1rem;
+    }
+
+    .coin-request-buttons{
+        flex-direction:column;
+    }
+
+    .coin-request-btn{
+        width:100%;
+        font-size:0.92rem;
+    }
+}
+
+/* Extra Small Devices */
+
+@media (max-width:480px){
+
+
+    .coin-request-content h3{
+        font-size:1.2rem;
+    }
+
+    .coin-request-content p{
+        font-size:0.8rem;
+    }
+
+    .coin-request-btn{
+        padding:0.9rem;
+    }
+}
+
+/* Mobile Bottom Sheet Animation */
+
+@keyframes mobilePopup{
+    from{
+        opacity:0;
+        transform:translateY(100%);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+    </style>
 </head>
 <body>
 <div id="root"></div>
@@ -1584,6 +1832,20 @@ svg,
 <div id="initialLoader" class="initial-loader">
     <div class="mini-spinner"></div>
     <p style="color: #2563eb; font-weight: 500;">Loading Swapify...</p>
+</div>
+
+<!-- Coin Request Popup Modal -->
+<div id="coinRequestModal" class="coin-request-modal">
+    <div class="coin-request-content">
+        <h3> Request Coins</h3>
+        <p>Enter the amount you want to request (Max: 2000 coins)</p>
+        <input type="number" id="coinAmount" class="coin-amount-input" placeholder="Enter amount" min="1" max="2000">
+        <div id="maxLimitWarning" class="max-limit-warning">⚠️ Maximum limit is 2000 coins</div>
+        <div class="coin-request-buttons">
+            <button class="coin-request-btn coin-request-btn-secondary" id="cancelCoinRequest">Cancel</button>
+            <button class="coin-request-btn coin-request-btn-primary" id="confirmCoinRequest">Send Request</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1597,6 +1859,8 @@ svg,
         let currentSearch = '';
         let wishlist = new Set();
         let currentView = 'products';
+
+        const WHATSAPP_NUMBER = "923001234567"; // Replace with your WhatsApp number
 
         function hideInitialLoader() {
             let loader = document.getElementById('initialLoader');
@@ -1773,6 +2037,94 @@ svg,
             return true;
         }
 
+        // COIN REQUEST FUNCTION - Opens popup, then redirects to WhatsApp
+        function openCoinRequestPopup() {
+            if (!currentUser) {
+                showToast("Please login first to request coins", true);
+                return;
+            }
+            
+            const modal = document.getElementById('coinRequestModal');
+            const amountInput = document.getElementById('coinAmount');
+            const warning = document.getElementById('maxLimitWarning');
+            
+            // Reset form
+            amountInput.value = '';
+            warning.style.display = 'none';
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Clear any existing listeners and add new ones
+            const confirmBtn = document.getElementById('confirmCoinRequest');
+            const cancelBtn = document.getElementById('cancelCoinRequest');
+            
+            // Remove old listeners by cloning and replacing
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            const newCancelBtn = cancelBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+            
+            // Add validation on input
+            amountInput.oninput = function() {
+                let val = parseInt(this.value);
+                if (val >  2000) {
+                    warning.style.display = 'block';
+                } else {
+                    warning.style.display = 'none';
+                }
+            };
+            
+            // Cancel button
+            newCancelBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+            
+            // Confirm button
+            newConfirmBtn.onclick = function() {
+                let amount = parseInt(amountInput.value);
+                
+                if (!amount || amount < 1) {
+                    showToast("Please enter a valid amount", true);
+                    return;
+                }
+                
+                if (amount > 2000) {
+                    showToast("Maximum limit is 2000 coins", true);
+                    return;
+                }
+                
+                // Close modal
+                modal.style.display = 'none';
+                
+                // Create WhatsApp message
+                const message = ` COIN REQUEST - SWAPIFY USER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ USER PROFILE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Name: ${currentUser.name}
+ Email: ${currentUser.email}
+ WhatsApp: ${currentUser.phone || 'Not provided'}
+ Current Balance: ${currentUser.coins} coins
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COIN REQUEST DETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Amount Requested: ${amount} coins
+Max Limit: 2000 coins
+
+Purpose of Request:
+[Please explain why you need these coins]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Thank you for supporting Swapify!`;
+
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+                showToast(`Requesting ${amount} coins via WhatsApp...`, false);
+            };
+        }
+
         function showProductDetail(prod) {
             const isOwner = currentUser && currentUser.id === prod.seller_id;
             const mainImg = prod.image_url || 'https://placehold.co/800x500/f8fafc/2563eb?text=Swapify';
@@ -1787,11 +2139,18 @@ svg,
             
             const detailHTML = `
                 <div class="product-detail-page" id="productDetailPage">
-                    <div class="detail-header"><button class="back-btn" id="closeDetailBtn">←</button><h3>Product Details</h3></div>
+                    <div class="detail-header">
+                        <button class="back-btn" id="closeDetailBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                            </svg>
+                        </button>
+                        <h3>Product Details</h3>
+                    </div>
                     <div class="detail-grid">
                         <div><img id="galleryMain" class="main-gallery-img" src="${escapeHtml(allImages[0])}"><div class="thumbnail-strip" id="thumbStripDetail">${allImages.map((img,i)=>`<img class="thumbnail ${i===0?'active-thumb':''}" data-src="${escapeHtml(img)}" src="${escapeHtml(img)}">`).join('')}</div></div>
                         <div><h1 class="detail-title">${escapeHtml(prod.product_name)}</h1><div class="detail-price">${prod.price_coins} Coins</div><p style="margin:1rem 0;">${escapeHtml(prod.description||'No description provided.')}</p><div class="detail-seller-card"><strong>${escapeHtml(prod.seller_name)}</strong> | ${escapeHtml(prod.location)}</div>
-                        ${!isOwner && currentUser ? `<div class="detail-buttons"><button class="detail-btn detail-btn-buy" id="detailBuyBtn">Buy Now</button><button class="detail-btn detail-btn-swap" id="detailSwapBtn">Swap on WhatsApp</button></div>` : (isOwner && currentUser ? `<div class="detail-buttons"><button class="detail-btn detail-btn-delete" id="detailDeleteBtn">Delete Item</button></div>` : `<div class="detail-buttons"><button disabled style="background:#e2e8f0;">Login to interact</button></div>`)}
+                        ${!isOwner && currentUser ? `<div class="detail-buttons"><button class="detail-btn detail-btn-buy" id="detailBuyBtn">Buy Now</button><button class="detail-btn detail-btn-swap" id="detailSwapBtn">Swap</button></div>` : (isOwner && currentUser ? `<div class="detail-buttons"><button class="detail-btn detail-btn-delete" id="detailDeleteBtn">Delete Item</button></div>` : `<div class="detail-buttons"><button disabled style="background:#e2e8f0;">Login to interact</button></div>`)}
                         ${reviewsHtml}
                     </div></div>
                 </div>
@@ -1829,8 +2188,10 @@ svg,
 
         async function renderWishlistPage(){
             currentView='wishlist';
-            document.querySelector('.wishlist-section')?.classList.add('active');
-            document.querySelector('.products-section')?.classList.add('hide');
+            const wishlistSection = document.querySelector('.wishlist-section');
+            const productsSection = document.querySelector('.products-section');
+            if(wishlistSection) wishlistSection.classList.add('active');
+            if(productsSection) productsSection.classList.add('hide');
             const container = document.getElementById('wishlistContent');
             if(wishlist.size===0){ container.innerHTML=`<div class="empty-wishlist" style="text-align:center;padding:3rem;"><h3>Empty wishlist</h3><button id="backBrowse" style="margin-top:1rem; background:#2563eb; border:none; padding:0.5rem 1.5rem; border-radius:60px; color:white;">Browse Products</button></div>`; 
                 document.getElementById('backBrowse')?.addEventListener('click',()=>showProductsView()); return;
@@ -1838,7 +2199,7 @@ svg,
             const ids=Array.from(wishlist);
             const wishProds = cachedProducts.filter(p => ids.includes(p.id));
             if(!wishProds?.length){ container.innerHTML='<div class="empty-wishlist">No items found</div>'; return; }
-            container.innerHTML=`<div class="wishlist-grid">${wishProds.map(p=>`<div class="product-card" data-pid="${p.id}"><button class="wishlist-btn active-wish" data-wish="${p.id}"><svg class="wish-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg></button><img class="product-image" src="${p.image_url||'https://placehold.co/400x200/f8fafc/2563eb?text=Item'}"><div class="product-info"><div class="title-bar"><span>${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins} coins</span></div><div class="product-desc">${escapeHtml(p.description?.slice(0,60)||'')}</div><div class="seller-row">${escapeHtml(p.seller_name)} | ${p.location}</div><div class="action-buttons">${currentUser?.id!==p.seller_id? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name)}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name)}">Swap</button>`: `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}</div></div></div>`).join('')}</div>`;
+            container.innerHTML=`<div class="wishlist-grid">${wishProds.map(p=>`<div class="product-card" data-pid="${p.id}"><button class="wishlist-btn active-wish" data-wish="${p.id}"><svg class="wish-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" width="18" height="18"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg></button><img class="product-image" src="${p.image_url||'https://placehold.co/400x200/f8fafc/2563eb?text=Item'}"><div class="product-info"><div class="title-bar"><span>${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins} coins</span></div><div class="product-desc">${escapeHtml(p.description?.slice(0,60)||'')}</div><div class="seller-row">${escapeHtml(p.seller_name)} | ${p.location}</div><div class="action-buttons">${currentUser?.id!==p.seller_id? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name)}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name)}">Swap</button>`: `<button class="btn-delete" data-pid="${p.id}">Delete</button>`}</div></div></div>`).join('')}</div>`;
             attachCardEvents(wishProds);
         }
 
@@ -1850,12 +2211,19 @@ svg,
             document.querySelectorAll('.btn-delete').forEach(btn=>btn.onclick=async(e)=>{ e.stopPropagation(); if(confirm("Delete this item?")){ if(await deleteProduct(btn.dataset.pid)){ if(currentView === 'wishlist') renderWishlistPage(); } } });
         }
         
-        function showProductsView(){ currentView='products'; document.querySelector('.wishlist-section')?.classList.remove('active'); document.querySelector('.products-section')?.classList.remove('hide'); }
+        function showProductsView(){ 
+            currentView='products'; 
+            const wishlistSection = document.querySelector('.wishlist-section');
+            const productsSection = document.querySelector('.products-section');
+            if(wishlistSection) wishlistSection.classList.remove('active'); 
+            if(productsSection) productsSection.classList.remove('hide'); 
+        }
 
         async function renderHomePage(search=''){
             currentSearch=search; currentView='products';
             const prods = await loadProducts(search);
-            const gridHtml = prods.map(p=>`<div class="product-card" data-pid="${p.id}"><button class="wishlist-btn ${wishlist.has(p.id)?'active-wish':''}" data-wish="${p.id}"><svg class="wish-icon" viewBox="0 0 24 24" fill="${wishlist.has(p.id)?'currentColor':'none'}" stroke="currentColor"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg></button><img class="product-image" src="${p.image_url||'https://placehold.co/400x200/f8fafc/2563eb?text=Swapify'}"><div class="product-info"><div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins}</span></div><div class="product-desc">${escapeHtml(p.description?.slice(0,60)||'')}</div><div class="seller-row">${escapeHtml(p.seller_name)} | ${p.location}</div><div class="action-buttons">${currentUser && currentUser.id !== p.seller_id ? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name)}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name)}">Swap</button>` : (currentUser?.id === p.seller_id ? `<button class="btn-delete" data-pid="${p.id}">Delete</button>` : '')}</div></div></div>`).join('');
+            const gridHtml = prods.map(p=>`<div class="product-card" data-pid="${p.id}"><button class="wishlist-btn ${wishlist.has(p.id)?'active-wish':''}" data-wish="${p.id}"><svg class="wish-icon" viewBox="0 0 24 24" fill="${wishlist.has(p.id)?'currentColor':'none'}" stroke="currentColor" width="18" height="18"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg></button><img class="product-image" src="${p.image_url||'https://placehold.co/400x200/f8fafc/2563eb?text=Swapify'}"><div class="product-info"><div class="title-bar"><span class="product-title">${escapeHtml(p.product_name)}</span><span class="coin-tag">${p.price_coins}</span></div><div class="product-desc">${escapeHtml(p.description?.slice(0,60)||'')}</div><div class="seller-row">${escapeHtml(p.seller_name)} | ${p.location}</div><div class="action-buttons">${currentUser && currentUser.id !== p.seller_id ? `<button class="btn-buy" data-sid="${p.seller_id}" data-price="${p.price_coins}" data-pname="${escapeHtml(p.product_name)}">Buy</button><button class="btn-swap" data-pname="${escapeHtml(p.product_name)}">Swap</button>` : (currentUser?.id === p.seller_id ? `<button class="btn-delete" data-pid="${p.id}">Delete</button>` : '')}</div></div></div>`).join('');
+            
             const sliderBanners = [
                 {img:'https://images.pexels.com/photos/4450334/pexels-photo-4450334.jpeg?auto=compress&w=1200', title:'Premium Smartphone Exchange', desc:'Latest models | PTA approved', badge:'HOT DEALS'},
                 {img:'https://images.pexels.com/photos/909907/pexels-photo-909907.jpeg?auto=compress&w=1200', title:'Swap with Virtual Coins', desc:'Trade safely, earn rewards', badge:'ECO SYSTEM'},
@@ -1864,19 +2232,13 @@ svg,
             const slidesHtml = sliderBanners.map(b=>`<div class="slide-banner-wrapper"><img class="slide-banner" src="${b.img}"><div class="banner-text-overlay"><div class="banner-badge">${b.badge}</div><h3>${b.title}</h3><p>${b.desc}</p></div></div>`).join('');
             
             document.getElementById('root').innerHTML = `
-                <nav class="navbar"><div class="nav-container"><div class="logo-area"><img class="logo-image" src="logo.png" style="padding:0 12px;"><div class="header-search"><input id="headerSearchInput" value="${escapeHtml(search)}" placeholder="Search items..."><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-</svg>
- ${currentUser?.coins||0} <svg width="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 4v16M4 12h16"/></svg></span><button class="nav-icon-btn" id="profileBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profile</button><button class="nav-icon-btn" id="wishlistNavBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg> Wishlist</button><button class="nav-icon-btn" id="logoutBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="10" y1="12" x2="21" y2="12"/></svg> Logout</button></div></div></nav>
-                <div class="icon-bar"><button class="icon-item" id="sellIconBtn"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 4v16M4 12h16"/></svg><span>Sell</span></button><button class="icon-item" id="coinsIconBtn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
-</svg>
-<span>Coins</span></button><button class="icon-item" id="redeemIconBtn"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12v8H4v-8M12 2v12m0 0-3-3m3 3 3-3"/></svg><span>Redeem</span></button></div>
+                <nav class="navbar"><div class="nav-container"><div class="logo-area"><img class="logo-image" src="logo.png" style="padding:0 12px;"><div class="header-search"><input id="headerSearchInput" value="${escapeHtml(search)}" placeholder="Search items..."><button id="headerSearchBtn">Search</button></div></div><div class="header-actions"><span class="coin-badge-header" id="requestCoinsBtn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg> ${currentUser?.coins||0} <svg width="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 4v16M4 12h16"/></svg></span><button class="nav-icon-btn" id="profileBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Profile</button><button class="nav-icon-btn" id="wishlistNavBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg> Wishlist</button><button class="nav-icon-btn" id="logoutBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="10" y1="12" x2="21" y2="12"/></svg> Logout</button></div></div></nav>
+                <div class="icon-bar"><button class="icon-item" id="sellIconBtn"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 4v16M4 12h16"/></svg><span>Sell</span></button><button class="icon-item" id="coinsIconBtn"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg><span>Request Coins</span></button><button class="icon-item" id="redeemIconBtn"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12v8H4v-8M12 2v12m0 0-3-3m3 3 3-3"/></svg><span>Redeem</span></button></div>
                 <div class="hero-slider"><div class="slider-container"><div class="slider-images" id="sliderImages">${slidesHtml}</div><button class="slider-btn slider-left"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="white"><path d="M15 18l-6-6 6-6"/></svg></button><button class="slider-btn slider-right"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="white"><path d="M9 18l6-6-6-6"/></svg></button><div class="slider-dots" id="sliderDots"></div></div></div>
                 <div class="products-section"><div class="container"><h2 class="section-title">Fresh Swaps</h2><div class="products-grid" id="productsGrid">${prods.length?gridHtml:'<div style="text-align:center;padding:3rem;">No items found.</div>'}</div></div></div>
-                <div class="wishlist-section"><div class="container"><div class="section-header"><h2 class="section-title">My Wishlist</h2><button class="close-wishlist-btn" id="backToProductsBtn"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> Back to Products</button></div><div id="wishlistContent"></div></div></div>
-                <footer class="footer"><div class="footer-container"><div class="footer-section"><h4>Swapify</h4><p>Premium peer-to-peer marketplace for buying, selling & swapping items using virtual coins.</p><div class="footer-social"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.3 9 4-1-3.2.8-6.4 4-7 2.5-.5 4.7 1 5 3.5.8-.2 1.6-.5 2.3-.8-.2.8-.7 1.5-1.3 2 .6-.1 1.2-.3 1.8-.6z"/></svg></a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div></div><div class="footer-section"><h4>Quick Links</h4><a href="#">How it works</a><a href="#">Safety tips</a><a href="#">Support center</a><a href="#">Terms of service</a></div><div class="footer-section"><h4>Contact</h4><p>Email: hello@swapify.com</p><p>WhatsApp: +92 300 1234567</p><p>Lahore, Pakistan</p></div></div><div class="footer-bottom"><p>© 2025 Swapify — Premium Peer Swap Marketplace. All rights reserved.</p></div></footer>
-                <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal('sellModal')">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><div class="upload-group"><label class="upload-label"><i class="fas fa-camera"></i> Main Image</label><div class="upload-zone-single" id="mainUploadZone"><i class="fas fa-cloud-upload-alt"></i> Click to upload</div><input type="file" id="mainImageFile" accept="image/*" style="display:none"><div id="mainPreview" class="preview-img-grid"></div></div><div class="upload-group"><label class="upload-label"><i class="fas fa-images"></i> Extra Images (max 3)</label><div class="upload-zone-single" id="extraUploadZone"><i class="fas fa-plus-circle"></i> Upload extra</div><input type="file" id="extraImagesFile" accept="image/*" multiple style="display:none"><div id="extraPreview" class="preview-img-grid"></div></div><button type="submit" class="modal-btn">Publish Item</button></form></div></div>
+                <div class="wishlist-section"><div class="container"><div class="section-header" style="display:flex; justify-content:space-between; align-items:center;"><h2 class="section-title">My Wishlist</h2><button class="close-wishlist-btn" id="backToProductsBtn" style="background:#eff6ff; border:1px solid #bfdbfe; padding:0.5rem 1.2rem; border-radius:50px; cursor:pointer;"><svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg> Back to Products</button></div><div id="wishlistContent"></div></div></div>
+                <footer class="footer"><div class="footer-container"><div class="footer-section"><h4>Swapify</h4><p>Premium peer-to-peer marketplace for buying, selling & swapping items using virtual coins.</p><div class="footer-social"><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.3 9 4-1-3.2.8-6.4 4-7 2.5-.5 4.7 1 5 3.5.8-.2 1.6-.5 2.3-.8-.2.8-.7 1.5-1.3 2 .6-.1 1.2-.3 1.8-.6z"/></svg></a><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div></div><div class="footer-section"><h4>Quick Links</h4><a href="#">How it works</a><a href="#">Safety tips</a><a href="#">Support center</a><a href="#">Terms of service</a></div><div class="footer-section"><h4>Contact</h4><p>Email: hello@swapify.com</p><p>WhatsApp: +92 300 1234567</p><p>Lahore, Pakistan</p></div></div><div class="footer-bottom"><p>© 2025 Swapify — Premium Peer Swap Marketplace. All rights reserved.</p></div></footer>
+                <div id="sellModal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h3>List New Item</h3><form id="productForm"><input type="text" id="prodName" placeholder="Product name *" required><textarea id="prodDesc" rows="2" placeholder="Description"></textarea><input type="number" id="prodPrice" placeholder="Price in coins *" min="1" required><div class="upload-group"><label class="upload-label">Main Image</label><div class="upload-zone-single" id="mainUploadZone">Click to upload</div><input type="file" id="mainImageFile" accept="image/*" style="display:none"><div id="mainPreview" class="preview-img-grid"></div></div><div class="upload-group"><label class="upload-label">Extra Images (max 3)</label><div class="upload-zone-single" id="extraUploadZone">Upload extra</div><input type="file" id="extraImagesFile" accept="image/*" multiple style="display:none"><div id="extraPreview" class="preview-img-grid"></div></div><button type="submit" class="modal-btn">Publish Item</button></form></div></div>
                 <div id="redeemModal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h3>Redeem Code</h3><input id="codeInput" placeholder="Enter code"><button id="redeemSubmit" class="modal-btn">Redeem</button><p style="font-size:0.7rem; text-align:center;">Codes: SWAPIFY100, WELCOME50, GOLD200, TRADEPK</p></div></div>
                 <div id="profileModalView" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><div style="text-align:center;"><svg width="50" viewBox="0 0 24 24" fill="none" stroke="#2563eb"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h3 style="text-align:center;">${currentUser?.name}</h3><div class="info-row"><strong>Email:</strong> ${currentUser?.email}</div><div class="info-row"><strong>Coins:</strong> ${currentUser?.coins}</div><button class="modal-btn" onclick="document.getElementById('profileModalView').style.display='none'">Close</button></div></div>
             `;
@@ -1913,7 +2275,11 @@ svg,
             document.getElementById('backToProductsBtn')?.addEventListener('click',()=>showProductsView());
             document.getElementById('profileBtn')?.addEventListener('click',()=>document.getElementById('profileModalView').style.display='flex');
             document.getElementById('sellIconBtn')?.addEventListener('click',()=>document.getElementById('sellModal').style.display='flex');
-            document.getElementById('coinsIconBtn')?.addEventListener('click',()=>showToast(`Balance: ${currentUser?.coins||0} coins`));
+            
+            // COIN REQUEST BUTTON HANDLER (Opens popup)
+            document.getElementById('coinsIconBtn')?.addEventListener('click', openCoinRequestPopup);
+            document.getElementById('requestCoinsBtn')?.addEventListener('click', openCoinRequestPopup);
+            
             document.getElementById('redeemIconBtn')?.addEventListener('click',()=>document.getElementById('redeemModal').style.display='flex');
             document.getElementById('logoutBtn')?.addEventListener('click',()=>{ 
                 localStorage.removeItem('swapify_user'); 
@@ -1922,6 +2288,15 @@ svg,
                 wishlist.clear();
                 renderLoginPage(); 
             });
+            
+            // Close modal when clicking outside
+            const coinModal = document.getElementById('coinRequestModal');
+            coinModal?.addEventListener('click', function(e) {
+                if (e.target === coinModal) {
+                    coinModal.style.display = 'none';
+                }
+            });
+            
             document.querySelectorAll('.close-modal').forEach(el=>el.onclick=function(){ this.closest('.modal').style.display='none'; });
             document.getElementById('redeemSubmit')?.addEventListener('click',async()=>{ 
                 let code=document.getElementById('codeInput').value; 
@@ -1957,7 +2332,8 @@ svg,
                 }
             });
             
-            document.getElementById('submitProductBtn')?.addEventListener('click',async()=>{ 
+            document.getElementById('productForm')?.addEventListener('submit', async(e)=>{ 
+                e.preventDefault();
                 let name=document.getElementById('prodName').value, desc=document.getElementById('prodDesc').value, price=parseInt(document.getElementById('prodPrice').value); 
                 if(!name||price<1||!mainBase64){ showToast("Name, price & main image required",true); return; } 
                 if(await addProduct({productName:name,description:desc,priceCoins:price}, mainBase64, extraBase64s)){ 
@@ -1972,6 +2348,10 @@ svg,
                     extraBase64s = [];
                 } 
             });
+            
+            document.getElementById('mainUploadZone')?.addEventListener('click',()=>document.getElementById('mainImageFile')?.click());
+            document.getElementById('extraUploadZone')?.addEventListener('click',()=>document.getElementById('extraImagesFile')?.click());
+            
             attachCardEvents(prods);
         }
 
